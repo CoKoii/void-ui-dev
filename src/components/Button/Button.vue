@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { ButtonProps } from './types'
-defineProps<ButtonProps>()
+const _ref = ref<HTMLButtonElement>()
+withDefaults(defineProps<ButtonProps>(), {
+  nativeType: 'button',
+})
 defineOptions({
   name: 'VButton',
+})
+defineExpose({
+  ref: _ref,
 })
 </script>
 
 <template>
   <button
+    ref="_ref"
     class="v-button"
     :class="{
       [`v-button--${type}`]: type,
@@ -18,6 +26,8 @@ defineOptions({
       'is-disabled': disabled,
     }"
     :disabled="disabled"
+    :type="nativeType"
+    :autofocus="autofocus"
   >
     <slot></slot>
   </button>
