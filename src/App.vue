@@ -17,7 +17,7 @@ defineOptions({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .App {
   display: flex;
   justify-content: center;
