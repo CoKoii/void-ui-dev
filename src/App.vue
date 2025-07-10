@@ -13,7 +13,8 @@ defineOptions({
 
 <template>
   <div class="App">
-    <v-button type="primary" plain disabled ref="buttonElement">Click Me</v-button>
+    <v-button type="primary" plain ref="buttonElement">Click Me</v-button>
+    <a href="2312">666</a>
   </div>
 </template>
 
