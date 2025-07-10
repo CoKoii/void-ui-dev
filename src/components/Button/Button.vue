@@ -2,13 +2,16 @@
 import { ref } from 'vue'
 import type { ButtonProps } from './types'
 const _ref = ref<HTMLButtonElement>()
-const active = ref(false)
+const ripples = ref<{ id: number }[]>([])
+let id = 0
 const ButtonClick = () => {
-  active.value = true
+  const rippleId = id++
+  ripples.value.push({ id: rippleId })
   setTimeout(() => {
-    active.value = false
+    ripples.value = ripples.value.filter((r) => r.id !== rippleId)
   }, 500)
 }
+
 withDefaults(defineProps<ButtonProps>(), {
   nativeType: 'button',
 })
@@ -37,14 +40,7 @@ defineExpose({
     :type="nativeType"
     :autofocus="autofocus"
   >
-    <span
-      class="v-button-bg"
-      :style="{
-        transform: active ? 'scale(1.15,1.35)' : 'scale(1)',
-        opacity: active ? 0 : 1,
-        visibility: active ? 'visible' : 'hidden',
-      }"
-    ></span>
+    <span v-for="ripple in ripples" :key="ripple.id" class="v-button-bg"></span>
     <slot></slot>
   </button>
 </template>
