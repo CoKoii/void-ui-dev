@@ -13,6 +13,7 @@
   --font-weight-medium: 500;
   --font-weight-bold: 600;
   /* 字体颜色 */
+  --text-color-light: rgb(255, 255, 255);
   --text-color-primary: rgba(0, 0, 0, 0.88);
   --text-color-secondary: rgba(0, 0, 0, 0.65);
   --text-color-tertiary: rgba(0, 0, 0, 0.45);

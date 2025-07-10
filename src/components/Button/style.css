@@ -1,0 +1,12 @@
+.v-button {
+  padding: var(--padding-x-small);
+  border: none;
+  cursor: pointer;
+  line-height: 2.3;
+  border-radius: 6px;
+}
+.v-button--primary {
+  background-color: var(--blue-6);
+  color: var(--text-color-light);
+  box-shadow: color-mix(in srgb, var(--blue-6) 10%, transparent) 0px 2px 0px 0px;
+}

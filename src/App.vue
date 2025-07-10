@@ -13,9 +13,16 @@ defineOptions({
 
 <template>
   <div class="App">
-    <v-button type="primary" plain ref="buttonElement">Click Me</v-button>
-    <a href="2312">666</a>
+    <v-button type="primary" plain ref="buttonElement">Primary Button</v-button>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+</style>
