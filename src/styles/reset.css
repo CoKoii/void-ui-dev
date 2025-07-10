@@ -34,6 +34,13 @@ a {
   background-color: transparent;
   text-decoration: none;
   color: var(--text-color-primary);
+  &:hover,
+  &:focus {
+    /*  */
+  }
+  &:active {
+    /*  */
+  }
 }
 
 abbr[title] {
