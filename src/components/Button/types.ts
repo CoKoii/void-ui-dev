@@ -10,6 +10,7 @@ export interface ButtonProps {
   circle?: boolean
   disabled?: boolean
   autofocus?: boolean
+  color?: string
 }
 export interface ButtonInstance {
   ref: HTMLButtonElement

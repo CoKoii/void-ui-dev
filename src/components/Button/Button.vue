@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { ButtonProps } from './types'
 const _ref = ref<HTMLButtonElement>()
 const ripples = ref<{ id: number }[]>([])
@@ -9,10 +9,24 @@ const ButtonClick = () => {
   ripples.value.push({ id: rippleId })
   setTimeout(() => {
     ripples.value = ripples.value.filter((r) => r.id !== rippleId)
-  }, 500)
+  }, 400)
 }
-
-withDefaults(defineProps<ButtonProps>(), {
+const computedColor = computed(() => {
+  if (props.color) return props.color
+  switch (props.type) {
+    case 'primary':
+      return 'var(--blue-6)'
+    case 'success':
+      return 'var(--green-6)'
+    case 'warning':
+      return 'var(--orange-6)'
+    case 'danger':
+      return 'var(--red-6)'
+    default:
+      return 'var(--blue-6)'
+  }
+})
+const props = withDefaults(defineProps<ButtonProps>(), {
   nativeType: 'button',
 })
 defineOptions({
@@ -39,12 +53,23 @@ defineExpose({
     :disabled="disabled"
     :type="nativeType"
     :autofocus="autofocus"
+    :style="{
+      backgroundColor: `color-mix(in srgb, ${computedColor} 95%, black)`,
+      boxShadow: `color-mix(in srgb, ${computedColor} 10%, transparent) 0px 2px 0px 0px`,
+    }"
   >
-    <span v-for="ripple in ripples" :key="ripple.id" class="v-button-bg"></span>
+    <span
+      v-for="ripple in ripples"
+      :key="ripple.id"
+      class="v-button-bg"
+      :style="{
+        backgroundColor: `color-mix(in srgb, ${computedColor} 40%, transparent)`,
+      }"
+    ></span>
     <slot></slot>
   </button>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 @import './style.css';
 </style>

@@ -13,7 +13,7 @@ defineOptions({
 
 <template>
   <div class="App">
-    <v-button type="primary" plain ref="buttonElement">Primary Button</v-button>
+    <v-button type="danger" plain ref="buttonElement">Primary Button</v-button>
   </div>
 </template>
 
