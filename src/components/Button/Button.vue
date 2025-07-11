@@ -1,37 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import type { ButtonProps } from './types'
-const _ref = ref<HTMLButtonElement>()
-const ripples = ref<{ id: number }[]>([])
-let id = 0
-const ButtonClick = () => {
-  const rippleId = id++
-  ripples.value.push({ id: rippleId })
-  setTimeout(() => {
-    ripples.value = ripples.value.filter((r) => r.id !== rippleId)
-  }, 400)
-}
-const computedColor = computed(() => {
-  if (props.color) return props.color
-  switch (props.type) {
-    case 'primary':
-      return 'var(--blue-6)'
-    case 'success':
-      return 'var(--green-6)'
-    case 'warning':
-      return 'var(--orange-6)'
-    case 'danger':
-      return 'var(--red-6)'
-    default:
-      return 'var(--blue-6)'
-  }
-})
+import { useColorHook } from './hooks/useColor'
+import { useClick } from './hooks/useClick'
+
 const props = withDefaults(defineProps<ButtonProps>(), {
   nativeType: 'button',
 })
+
+const { ripples, ButtonClick } = useClick()
+
+const computedColor = useColorHook(props)
+
+const _ref = ref<HTMLButtonElement>()
+
 defineOptions({
   name: 'VButton',
 })
+
 defineExpose({
   ref: _ref,
 })
@@ -54,8 +40,14 @@ defineExpose({
     :type="nativeType"
     :autofocus="autofocus"
     :style="{
-      backgroundColor: `color-mix(in srgb, ${computedColor} 95%, black)`,
-      boxShadow: `color-mix(in srgb, ${computedColor} 10%, transparent) 0px 2px 0px 0px`,
+      backgroundColor: type ? `color-mix(in srgb, ${computedColor} 95%, black)` : 'var(--gray-1)',
+      boxShadow: type
+        ? `color-mix(in srgb, ${computedColor} 10%, transparent) 0px 2px 0px 0px`
+        : `color-mix(in srgb, currentColor 3%, transparent) 0px 2px 0px 0px`,
+      color: type
+        ? 'var(--text-color-light)'
+        : `color-mix(in srgb, ${computedColor} 70%, transparent)`,
+      borderColor: !type ? `color-mix(in srgb, ${computedColor} 50%, transparent)` : 'currentColor',
     }"
   >
     <span
@@ -63,7 +55,9 @@ defineExpose({
       :key="ripple.id"
       class="v-button-bg"
       :style="{
-        backgroundColor: `color-mix(in srgb, ${computedColor} 40%, transparent)`,
+        backgroundColor: type
+          ? `color-mix(in srgb, ${computedColor} 40%, transparent)`
+          : `color-mix(in srgb, ${computedColor || 'var(--gray-6)'} 20%, transparent)`,
       }"
     ></span>
     <slot></slot>
