@@ -17,7 +17,7 @@ defineOptions({
     <v-button type="success" ref="buttonElement">type success</v-button>
     <v-button type="danger" ref="buttonElement">type danger</v-button>
     <v-button type="warning" ref="buttonElement">type warning</v-button>
-    <v-button ref="buttonElement" color="red">没有type</v-button>
+    <v-button ref="buttonElement" color="purple">没有type</v-button>
   </div>
 </template>
 

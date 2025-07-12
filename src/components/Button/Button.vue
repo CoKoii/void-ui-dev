@@ -47,7 +47,7 @@ defineExpose({
       color: type
         ? 'var(--text-color-light)'
         : `color-mix(in srgb, ${computedColor} 70%, transparent)`,
-      borderColor: !type ? `color-mix(in srgb, ${computedColor} 50%, transparent)` : 'currentColor',
+      borderColor: type ? `color-mix(in srgb, ${computedColor} 50%, transparent)` : 'currentColor',
     }"
   >
     <span

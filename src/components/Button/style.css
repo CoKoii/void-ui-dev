@@ -14,11 +14,13 @@
   border-width: 1px;
   border-style: solid;
   border-color: color-mix(in srgb, currentColor 20%, transparent);
-  &:hover {
-    /* background-color: color-mix(in srgb, currentColor 20%, var(--gray-1)); */
+  white-space: nowrap;
+  &:hover,
+  &:focus {
+    transform: scale(1.05);
   }
   &:active {
-    opacity: 1;
+    transform: scale(1);
   }
 }
 .v-button-bg {
