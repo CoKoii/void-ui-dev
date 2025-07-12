@@ -1,6 +1,7 @@
 export type ButtonType = 'primary' | 'success' | 'danger' | 'warning' | 'info'
 export type ButtonSize = 'large' | 'small'
 export type NativeType = 'button' | 'submit' | 'reset'
+export type ButtonBorder = 'solid' | 'dashed' | 'dotted' | 'link'
 export interface ButtonProps {
   type?: ButtonType
   size?: ButtonSize
@@ -11,6 +12,8 @@ export interface ButtonProps {
   disabled?: boolean
   autofocus?: boolean
   color?: string
+  border?: ButtonBorder
+  hoverColor?: string
 }
 export interface ButtonInstance {
   ref: HTMLButtonElement

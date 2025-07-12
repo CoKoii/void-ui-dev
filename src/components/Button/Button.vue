@@ -6,6 +6,7 @@ import { useClick } from './hooks/useClick'
 
 const props = withDefaults(defineProps<ButtonProps>(), {
   nativeType: 'button',
+  border: 'solid',
 })
 
 const { ripples, ButtonClick } = useClick()
@@ -32,6 +33,7 @@ defineExpose({
       :class="{
         [`v-button--${type}`]: type,
         [`v-button--${size}`]: size,
+        [`v-button--${border}`]: border,
         'is-plain': plain,
         'is-circle': circle,
         'is-round': round,
@@ -63,6 +65,7 @@ defineExpose({
         backgroundColor: type
           ? `color-mix(in srgb, ${computedColor} 40%, transparent)`
           : `color-mix(in srgb, ${computedColor || 'var(--gray-6)'} 20%, transparent)`,
+        display: _ref?.classList.contains('v-button--link') ? 'none' : 'block',
       }"
     ></span>
   </div>

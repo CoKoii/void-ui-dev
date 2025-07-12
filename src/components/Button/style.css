@@ -20,17 +20,30 @@
   border-color: color-mix(in srgb, currentColor 20%, transparent);
   white-space: nowrap;
   opacity: 0.95;
+  &:hover {
+    opacity: 0.8;
+    color: var(--blue-6);
+  }
+  &:active {
+    opacity: 1;
+  }
 }
-
-.v-button:hover,
-.v-button:focus {
-  opacity: 0.8;
+.v-button--dashed {
+  border-style: dashed;
 }
-
-.v-button:active {
-  opacity: 1;
+.v-button--dotted {
+  border-style: dotted;
 }
-
+.v-button--link {
+  border-style: none;
+}
+.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.5;
+  }
+}
 .v-button-bg {
   position: absolute;
   left: 0;
