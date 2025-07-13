@@ -15,13 +15,14 @@ defineOptions({
   <div class="App">
     <v-button type="primary" ref="buttonElement">type primary</v-button>
     <v-button type="success" ref="buttonElement">type success</v-button>
-    <v-button type="danger" ref="buttonElement">type danger</v-button>
+    <v-button type="danger" ref="buttonElement" shape="round">type danger</v-button>
     <v-button type="warning" ref="buttonElement" disabled>type warning</v-button>
     <v-button ref="buttonElement" border="dashed">没有type</v-button>
     <v-button ref="buttonElement" color="red" border="dotted">没有type</v-button>
     <v-button ref="buttonElement" color="blue" border="link">没有type</v-button>
     <v-button ref="buttonElement" color="purple" border="solid">没有type</v-button>
     <v-button ref="buttonElement" color="blue" border="link" disabled>disabled</v-button>
+    <v-button type="success" ref="buttonElement" shape="circle">C</v-button>
   </div>
 </template>
 

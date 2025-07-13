@@ -37,13 +37,21 @@
 .v-button--link {
   border-style: none;
 }
+.v-button--round {
+  border-radius: 9999px;
+}
+.v-button--circle {
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+}
 .is-disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.3;
   &:hover {
-    opacity: 0.5;
+    opacity: 0.3;
   }
 }
+
 .v-button-bg {
   position: absolute;
   left: 0;
@@ -55,7 +63,13 @@
   pointer-events: none;
   z-index: 0;
 }
+.v-button--circle ~ .v-button-bg {
+  border-radius: 50%;
+}
 
+.v-button--round ~ .v-button-bg {
+  border-radius: 9999px;
+}
 @keyframes button-ripple {
   0% {
     transform: scale(1);
@@ -63,6 +77,21 @@
   }
   100% {
     transform: scale(1.15, 1.45);
+    opacity: 0;
+  }
+}
+
+.v-button--circle ~ .v-button-bg {
+  animation: button-ripple-circle var(--transition-duration-4) ease-out;
+}
+
+@keyframes button-ripple-circle {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
     opacity: 0;
   }
 }
