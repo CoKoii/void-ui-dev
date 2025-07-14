@@ -1,4 +1,4 @@
-export type ButtonType = 'primary' | 'success' | 'danger' | 'warning' | 'info'
+export type ButtonType = 'primary' | 'success' | 'danger' | 'warning'
 export type ButtonSize = 'large' | 'small'
 export type NativeType = 'button' | 'submit' | 'reset'
 export type ButtonBorder = 'solid' | 'dashed' | 'dotted' | 'link'
@@ -9,7 +9,6 @@ export interface ButtonProps {
   nativeType?: NativeType
   border?: ButtonBorder
   shape?: ButtonShape
-  plain?: boolean
   round?: boolean
   circle?: boolean
   disabled?: boolean

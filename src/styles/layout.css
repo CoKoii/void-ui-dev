@@ -1,6 +1,9 @@
 :root {
   /* 内边距 padding */
   --padding-x-small: 0 15px;
+  --padding-xy-small: 12px 8px;
+  --padding-xy-large: 1px 15px;
+  --padding-circle-1: 10px;
   /* border 圆角 */
   --border-radius-small: 6px;
 }

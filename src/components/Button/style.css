@@ -17,6 +17,7 @@
   background-color: var(--gray-1);
   border-width: 1px;
   border-style: solid;
+  font-weight: 500;
   border-color: color-mix(in srgb, currentColor 20%, transparent);
   white-space: nowrap;
   opacity: 0.95;
@@ -43,6 +44,16 @@
 .v-button--circle {
   border-radius: 50%;
   aspect-ratio: 1 / 1;
+  line-height: 0;
+  padding: var(--padding-circle-1);
+}
+.v-button--small {
+  line-height: 0;
+  padding: var(--padding-xy-small);
+}
+.v-button--large {
+  padding: var(--padding-xy-large);
+  font-size: var(--font-size-5);
 }
 .is-disabled {
   cursor: not-allowed;

@@ -35,7 +35,7 @@ defineExpose({
         [`v-button--${size}`]: size,
         [`v-button--${border}`]: border,
         [`v-button--${shape}`]: shape,
-        'is-plain': plain,
+        [`v-button--${size}`]: size,
         'is-circle': circle,
         'is-round': round,
         'is-disabled': disabled,
