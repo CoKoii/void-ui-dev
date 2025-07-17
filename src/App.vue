@@ -28,11 +28,15 @@ onMounted(() => {
     document.body.style.backgroundColor = '#1E2025'
   }
 })
+const buttonRef = ref()
+const handleClick = () => {
+  console.log(buttonRef.value._ref)
+}
 </script>
 
 <template>
   <div class="App">
-    <VButton>主要按钮</VButton>
+    <VButton @click="handleClick" ref="buttonRef">主要按钮</VButton>
     <VButton type="secondary">次要按钮</VButton>
     <VButton type="outline">线框按钮</VButton>
     <div></div>

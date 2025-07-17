@@ -39,6 +39,9 @@ const buttonStyle = computed(() =>
 defineOptions({
   name: 'VButton',
 })
+defineExpose({
+  _ref: buttonRef,
+})
 </script>
 
 <template>
