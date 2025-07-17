@@ -17,12 +17,16 @@
   white-space: nowrap;
   border-radius: var(--border-radius-8);
   border: 1px solid transparent;
-  transition: all var(--transition-duration-2);
   background-color: var(--blue-6);
   z-index: 1;
   position: relative;
   user-select: none;
   font-weight: var(--font-weight-500);
+  &:hover,
+  &:focus,
+  &:active {
+    transition: all var(--transition-duration-3);
+  }
 }
 
 /* 按钮类型样式 */
@@ -30,12 +34,11 @@
   color: #ffffff !important;
 }
 .v-button-type-primary:hover {
-  opacity: 0.8;
+  background-color: color-mix(in srgb, currentColor, var(--blue-6) var(--mix-90)) !important;
 }
 .v-button-type-primary:active {
-  opacity: 1;
+  background-color: var(--blue-6) !important;
 }
-
 .v-button-type-secondary,
 .v-button-type-outline {
   color: var(--text-color-primary) !important;
