@@ -115,7 +115,6 @@
 .v-button-disabled {
   cursor: not-allowed;
   opacity: 0.5;
-  pointer-events: none;
 }
 .v-button-long {
   display: block;
