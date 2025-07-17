@@ -119,8 +119,8 @@
   color: var(--gold-6) !important;
 }
 .v-button-status-danger {
-  background-color: var(--red-6);
-  color: var(--red-6) !important;
+  background-color: var(--red-5);
+  color: var(--red-5) !important;
 }
 
 .v-button-type-primary.v-button-status-primary,
