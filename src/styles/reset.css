@@ -5,8 +5,8 @@ html {
 body {
   margin: 0;
   font-family: var(--font-family);
-  font-weight: var(--font-weight-normal);
-  font-size: var(--font-size-3);
+  font-weight: var(--font-weight-400);
+  font-size: var(--font-size-14);
   color: var(--text-color-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -34,13 +34,6 @@ a {
   background-color: transparent;
   text-decoration: none;
   color: var(--text-color-primary);
-  &:hover,
-  &:focus {
-    /*  */
-  }
-  &:active {
-    /*  */
-  }
 }
 
 abbr[title] {

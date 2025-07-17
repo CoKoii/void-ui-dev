@@ -15,19 +15,19 @@
   border: none;
   cursor: pointer;
   white-space: nowrap;
-  border-radius: 8px;
+  border-radius: var(--border-radius-8);
   border: 1px solid transparent;
-  transition: all 0.2s;
+  transition: all var(--transition-duration-2);
   background-color: var(--blue-6);
-  z-index: 2;
+  z-index: 1;
   position: relative;
   user-select: none;
-  font-weight: 500;
+  font-weight: var(--font-weight-500);
 }
 
 /* 按钮类型样式 */
 .v-button-type-primary {
-  color: white !important;
+  color: var(--gray-1) !important;
 }
 .v-button-type-primary:hover {
   opacity: 0.8;
@@ -38,58 +38,58 @@
 
 .v-button-type-secondary,
 .v-button-type-outline {
-  color: #333 !important;
+  color: var(--text-color-primary) !important;
 }
 .v-button-type-secondary {
-  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
+  background-color: color-mix(in srgb, currentColor 10%, var(--gray-1) 90%) !important;
 }
 .v-button-type-secondary:hover {
-  background-color: color-mix(in srgb, currentColor 20%, black 0%) !important;
+  background-color: color-mix(in srgb, currentColor 20%, var(--gray-1) 80%) !important;
 }
 .v-button-type-secondary:active {
-  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
+  background-color: color-mix(in srgb, currentColor 30%, var(--gray-1) 70%) !important;
 }
 
 .v-button-type-outline {
-  background-color: color-mix(in srgb, currentColor 0%, white 100%) !important;
-  border-color: color-mix(in srgb, currentColor 15%, white 85%);
+  background-color: color-mix(in srgb, currentColor 0%, var(--gray-1) 100%) !important;
+  border-color: color-mix(in srgb, currentColor 15%, var(--gray-1) 85%);
 }
 .v-button-type-outline:hover {
-  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
-  border-color: color-mix(in srgb, currentColor 25%, white 75%);
+  background-color: color-mix(in srgb, currentColor 10%, var(--gray-1) 90%) !important;
+  border-color: color-mix(in srgb, currentColor 25%, var(--gray-1) 75%);
 }
 .v-button-type-outline:active {
-  background-color: color-mix(in srgb, currentColor 0%, white 100%) !important;
+  background-color: color-mix(in srgb, currentColor 0%, var(--gray-1) 100%) !important;
 }
 
 /* 按钮尺寸样式 */
 .v-button-size-s {
-  padding: 0 8px;
+  padding: var(--padding-x-8);
   min-width: 24px;
   height: 24px;
-  font-size: 12px;
-  border-radius: 4px;
+  font-size: var(--font-size-12);
+  border-radius: var(--border-radius-4);
 }
 .v-button-size-m {
-  padding: 0 16px;
+  padding: var(--padding-x-16);
   min-width: 32px;
   height: 32px;
   font-size: inherit;
-  border-radius: 4px;
+  border-radius: var(--border-radius-4);
 }
 .v-button-size-l {
   font-size: inherit;
-  padding: 0 16px;
+  padding: var(--padding-x-16);
   min-width: 36px;
   height: 36px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-8);
 }
 .v-button-size-xl {
-  padding: 0 24px;
+  padding: var(--padding-x-24);
   min-width: 48px;
   height: 48px;
-  font-size: 16px;
-  border-radius: 8px;
+  font-size: var(--font-size-16);
+  border-radius: var(--border-radius-8);
 }
 
 /* 按钮形状样式 */
@@ -99,7 +99,7 @@
 }
 .v-button-shape-circle,
 .v-button-shape-round {
-  border-radius: 800px;
+  border-radius: 1000px;
 }
 
 /* 按钮状态样式 */
@@ -124,7 +124,7 @@
 .v-button-type-primary.v-button-status-success,
 .v-button-type-primary.v-button-status-warning,
 .v-button-type-primary.v-button-status-danger {
-  color: white !important;
+  color: var(--gray-1) !important;
 }
 
 /* 按钮禁用和长按钮样式 */
@@ -147,19 +147,19 @@
   top: 0;
   width: 100%;
   height: 100%;
-  animation: button-ripple 0.4s ease-out;
+  animation: button-ripple var(--transition-duration-4) ease-out;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   border-radius: inherit;
 }
 
 /* 不同形状的波纹动画 */
 .v-button-shape-circle ~ .button-bg {
-  animation: button-ripple-circle 0.4s ease-out;
+  animation: button-ripple-circle var(--transition-duration-4) ease-out;
 }
 
 .v-button-shape-square ~ .button-bg {
-  animation: button-ripple-square 0.4s ease-out;
+  animation: button-ripple-square var(--transition-duration-4) ease-out;
 }
 
 .button-bg-default {
