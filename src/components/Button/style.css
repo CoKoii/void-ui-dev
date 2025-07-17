@@ -27,7 +27,7 @@
 
 /* 按钮类型样式 */
 .v-button-type-primary {
-  color: var(--gray-1) !important;
+  color: #ffffff !important;
 }
 .v-button-type-primary:hover {
   opacity: 0.8;
@@ -41,25 +41,25 @@
   color: var(--text-color-primary) !important;
 }
 .v-button-type-secondary {
-  background-color: color-mix(in srgb, currentColor 10%, var(--gray-1) 90%) !important;
+  background-color: color-mix(in srgb, currentColor, var(--gray-2) var(--mix-90)) !important;
 }
 .v-button-type-secondary:hover {
-  background-color: color-mix(in srgb, currentColor 20%, var(--gray-1) 80%) !important;
+  background-color: color-mix(in srgb, currentColor, var(--gray-2) var(--mix-80)) !important;
 }
 .v-button-type-secondary:active {
-  background-color: color-mix(in srgb, currentColor 30%, var(--gray-1) 70%) !important;
+  background-color: color-mix(in srgb, currentColor, var(--gray-2) var(--mix-70)) !important;
 }
 
 .v-button-type-outline {
-  background-color: color-mix(in srgb, currentColor 0%, var(--gray-1) 100%) !important;
-  border-color: color-mix(in srgb, currentColor 15%, var(--gray-1) 85%);
+  background-color: color-mix(in srgb, currentColor, transparent 100%) !important;
+  border-color: color-mix(in srgb, currentColor, transparent 85%);
 }
 .v-button-type-outline:hover {
-  background-color: color-mix(in srgb, currentColor 10%, var(--gray-1) 90%) !important;
-  border-color: color-mix(in srgb, currentColor 25%, var(--gray-1) 75%);
+  background-color: color-mix(in srgb, currentColor, transparent 90%) !important;
+  border-color: color-mix(in srgb, currentColor, transparent 75%);
 }
 .v-button-type-outline:active {
-  background-color: color-mix(in srgb, currentColor 0%, var(--gray-1) 100%) !important;
+  background-color: color-mix(in srgb, currentColor, transparent 100%) !important;
 }
 
 /* 按钮尺寸样式 */
@@ -124,7 +124,7 @@
 .v-button-type-primary.v-button-status-success,
 .v-button-type-primary.v-button-status-warning,
 .v-button-type-primary.v-button-status-danger {
-  color: var(--gray-1) !important;
+  color: #ffffff !important;
 }
 
 /* 按钮禁用和长按钮样式 */

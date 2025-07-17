@@ -1,7 +1,32 @@
 <script setup lang="ts">
 import VButton from '@/components/Button/Button.vue'
+import { ref, onMounted } from 'vue'
+
 defineOptions({
   name: 'App',
+})
+
+const isDark = ref(false)
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  if (isDark.value) {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    document.body.style.backgroundColor = '#1E2025'
+  } else {
+    document.documentElement.removeAttribute('data-theme')
+    document.body.style.backgroundColor = ''
+  }
+}
+
+onMounted(() => {
+  // 检查系统主题偏好
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (prefersDark) {
+    isDark.value = true
+    document.documentElement.setAttribute('data-theme', 'dark')
+    document.body.style.backgroundColor = '#1E2025'
+  }
 })
 </script>
 
@@ -81,6 +106,16 @@ defineOptions({
     <div></div>
     <VButton long>主要按钮</VButton>
   </div>
+
+  <!-- 主题切换按钮 -->
+  <VButton
+    class="theme-toggle"
+    shape="circle"
+    @click="toggleTheme"
+    :title="isDark ? '切换到浅色主题' : '切换到深色主题'"
+  >
+    {{ isDark ? '☀️' : '🌙' }}
+  </VButton>
 </template>
 
 <style scoped lang="scss">
@@ -91,5 +126,20 @@ defineOptions({
   align-items: center;
   height: 100vh;
   overflow: hidden;
+}
+
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
 }
 </style>
