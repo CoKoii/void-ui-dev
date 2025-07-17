@@ -2,7 +2,6 @@
 .ButtonContainer {
   display: inline-block;
   position: relative;
-  width: 100%;
 }
 /* 按钮统一样式 */
 .v-button {
@@ -14,6 +13,9 @@
   border: 1px solid transparent;
   transition: all 0.2s;
   background-color: var(--blue-6);
+  z-index: 2;
+  position: relative;
+  user-select: none;
 }
 /* 按钮类型样式 */
 .v-button-type-primary {
@@ -109,6 +111,12 @@
 .v-button-type-primary.v-button-status-danger {
   color: white !important;
 }
+/* 按钮禁用样式 */
+.v-button-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
 .v-button-long {
   display: block;
   width: 100%;
@@ -122,12 +130,32 @@
   height: 100%;
   animation: button-ripple 0.4s ease-out;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
+
+.button-bg-default {
+  background-color: color-mix(in srgb, currentColor 40%, transparent 60%);
+}
+.button-bg-primary {
+  background-color: color-mix(in srgb, var(--blue-6) 80%, transparent 20%);
+}
+
+.button-bg-success {
+  background-color: color-mix(in srgb, var(--green-6) 80%, transparent 20%);
+}
+
+.button-bg-warning {
+  background-color: color-mix(in srgb, var(--orange-6) 80%, transparent 20%);
+}
+
+.button-bg-danger {
+  background-color: color-mix(in srgb, var(--red-6) 80%, transparent 20%);
+}
+
 @keyframes button-ripple {
   0% {
     transform: scale(1);
-    opacity: 1;
+    opacity: 0.3;
   }
   100% {
     transform: scale(1.15, 1.45);

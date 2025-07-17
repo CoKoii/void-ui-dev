@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ButtonProps } from './types'
 import { useClick } from './hooks/useClick'
+import { ref } from 'vue'
+const buttonRef = ref<HTMLButtonElement | null>(null)
 const { ripples, ButtonClick } = useClick()
 const props = withDefaults(defineProps<ButtonProps>(), {
   type: 'primary',
@@ -14,6 +16,7 @@ defineOptions({
 <template>
   <div class="ButtonContainer">
     <button
+      ref="buttonRef"
       class="v-button"
       @click="ButtonClick"
       :class="{
@@ -28,7 +31,15 @@ defineOptions({
     >
       <slot>Button</slot>
     </button>
-    <div class="button-bg" v-for="ripple in ripples" :key="ripple.id"></div>
+    <div
+      class="button-bg"
+      :class="[
+        `button-bg-${props.status || (props.type === 'secondary' || props.type === 'outline' ? 'default' : 'primary')}`,
+      ]"
+      :style="{ borderRadius: ripple.borderRadius }"
+      v-for="ripple in ripples"
+      :key="ripple.id"
+    ></div>
   </div>
 </template>
 
