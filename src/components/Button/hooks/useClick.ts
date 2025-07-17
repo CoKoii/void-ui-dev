@@ -1,19 +1,16 @@
 import { ref } from 'vue'
 
 export function useClick() {
-  const ripples = ref<{ id: number; borderRadius: string }[]>([])
+  const ripples = ref<number[]>([])
   let id = 0
 
-  const ButtonClick = (event: Event) => {
-    const button = event.currentTarget as HTMLButtonElement
-    const computedStyle = window.getComputedStyle(button)
-    const borderRadius = computedStyle.borderRadius
-
+  const ButtonClick = () => {
     const rippleId = id++
-    ripples.value.push({ id: rippleId, borderRadius })
+    ripples.value.push(rippleId)
 
     setTimeout(() => {
-      ripples.value = ripples.value.filter((r) => r.id !== rippleId)
+      const index = ripples.value.indexOf(rippleId)
+      if (index > -1) ripples.value.splice(index, 1)
     }, 300)
   }
 

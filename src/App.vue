@@ -72,6 +72,14 @@ defineOptions({
     <div></div>
     <div></div>
     <VButton disabled>主要按钮</VButton>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <VButton long>主要按钮</VButton>
   </div>
 </template>
 

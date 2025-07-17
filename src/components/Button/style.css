@@ -3,6 +3,12 @@
   display: inline-block;
   position: relative;
 }
+
+.ButtonContainer-long {
+  display: block;
+  width: 100%;
+}
+
 /* 按钮统一样式 */
 .v-button {
   outline: none;
@@ -16,38 +22,46 @@
   z-index: 2;
   position: relative;
   user-select: none;
+  font-weight: 500;
 }
+
 /* 按钮类型样式 */
 .v-button-type-primary {
   color: white !important;
-  &:hover {
-    opacity: 0.8;
-  }
-  &:active {
-    opacity: 1;
-  }
 }
-.v-button-type-secondary {
-  color: #333 !important;
-  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
-  &:hover {
-    background-color: color-mix(in srgb, currentColor 20%, black 0%) !important;
-  }
-  &:active {
-    background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
-  }
+.v-button-type-primary:hover {
+  opacity: 0.8;
 }
+.v-button-type-primary:active {
+  opacity: 1;
+}
+
+.v-button-type-secondary,
 .v-button-type-outline {
   color: #333 !important;
+}
+.v-button-type-secondary {
+  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
+}
+.v-button-type-secondary:hover {
+  background-color: color-mix(in srgb, currentColor 20%, black 0%) !important;
+}
+.v-button-type-secondary:active {
+  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
+}
+
+.v-button-type-outline {
   background-color: color-mix(in srgb, currentColor 0%, white 100%) !important;
   border-color: color-mix(in srgb, currentColor 15%, white 85%);
-  &:hover {
-    background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
-  }
-  &:active {
-    background-color: color-mix(in srgb, currentColor 0%, white 100%) !important;
-  }
 }
+.v-button-type-outline:hover {
+  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
+  border-color: color-mix(in srgb, currentColor 25%, white 75%);
+}
+.v-button-type-outline:active {
+  background-color: color-mix(in srgb, currentColor 0%, white 100%) !important;
+}
+
 /* 按钮尺寸样式 */
 .v-button-size-s {
   padding: 0 8px;
@@ -77,17 +91,17 @@
   font-size: 16px;
   border-radius: 8px;
 }
+
 /* 按钮形状样式 */
-.v-button-shape-circle {
-  padding: 0;
-  border-radius: 800px;
-}
-.v-button-shape-round {
-  border-radius: 800px;
-}
+.v-button-shape-circle,
 .v-button-shape-square {
   padding: 0;
 }
+.v-button-shape-circle,
+.v-button-shape-round {
+  border-radius: 800px;
+}
+
 /* 按钮状态样式 */
 .v-button-status-primary {
   background-color: var(--blue-6);
@@ -105,25 +119,28 @@
   background-color: var(--red-6);
   color: var(--red-6) !important;
 }
+
 .v-button-type-primary.v-button-status-primary,
 .v-button-type-primary.v-button-status-success,
 .v-button-type-primary.v-button-status-warning,
 .v-button-type-primary.v-button-status-danger {
   color: white !important;
 }
-/* 按钮禁用样式 */
+
+/* 按钮禁用和长按钮样式 */
 .v-button-disabled {
   cursor: not-allowed;
   opacity: 0.5;
-  &:hover {
-    opacity: 0.5;
-  }
+}
+.v-button-disabled:hover {
+  opacity: 0.5;
 }
 .v-button-long {
   display: block;
   width: 100%;
-  border-radius: 8px;
 }
+
+/* 波纹效果 */
 .button-bg {
   position: absolute;
   left: 0;
@@ -133,6 +150,16 @@
   animation: button-ripple 0.4s ease-out;
   pointer-events: none;
   z-index: 1;
+  border-radius: inherit;
+}
+
+/* 不同形状的波纹动画 */
+.v-button-shape-circle ~ .button-bg {
+  animation: button-ripple-circle 0.4s ease-out;
+}
+
+.v-button-shape-square ~ .button-bg {
+  animation: button-ripple-square 0.4s ease-out;
 }
 
 .button-bg-default {
@@ -141,19 +168,17 @@
 .button-bg-primary {
   background-color: color-mix(in srgb, var(--blue-6) 80%, transparent 20%);
 }
-
 .button-bg-success {
   background-color: color-mix(in srgb, var(--green-6) 80%, transparent 20%);
 }
-
 .button-bg-warning {
   background-color: color-mix(in srgb, var(--orange-6) 80%, transparent 20%);
 }
-
 .button-bg-danger {
   background-color: color-mix(in srgb, var(--red-6) 80%, transparent 20%);
 }
 
+/* 默认波纹动画（适用于round形状） */
 @keyframes button-ripple {
   0% {
     transform: scale(1);
@@ -161,6 +186,30 @@
   }
   100% {
     transform: scale(1.15, 1.45);
+    opacity: 0;
+  }
+}
+
+/* 圆形按钮波纹动画 */
+@keyframes button-ripple-circle {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* 方形按钮波纹动画 */
+@keyframes button-ripple-square {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.5);
     opacity: 0;
   }
 }
