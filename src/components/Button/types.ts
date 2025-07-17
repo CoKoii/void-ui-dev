@@ -1,20 +1,13 @@
-export type ButtonType = 'primary' | 'success' | 'danger' | 'warning'
-export type ButtonSize = 'large' | 'small'
-export type NativeType = 'button' | 'submit' | 'reset'
-export type ButtonBorder = 'solid' | 'dashed' | 'dotted' | 'link'
-export type ButtonShape = 'default' | 'round' | 'circle'
+export type ButtonType = 'primary' | 'secondary' | 'outline'
+export type ButtonShape = 'round' | 'circle' | 'square'
+export type ButtonStatus = 'primary' | 'success' | 'warning' | 'danger'
+export type ButtonSize = 's' | 'm' | 'l' | 'xl'
 export interface ButtonProps {
   type?: ButtonType
-  size?: ButtonSize
-  nativeType?: NativeType
-  border?: ButtonBorder
   shape?: ButtonShape
-  round?: boolean
-  circle?: boolean
+  status?: ButtonStatus
+  size?: ButtonSize
   disabled?: boolean
-  autofocus?: boolean
-  color?: string
-}
-export interface ButtonInstance {
-  ref: HTMLButtonElement
+  loading?: boolean
+  long?: boolean
 }

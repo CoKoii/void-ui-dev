@@ -1,77 +1,37 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { ButtonProps } from './types'
-import { useColorHook } from './hooks/useColor'
 import { useClick } from './hooks/useClick'
-
-const props = withDefaults(defineProps<ButtonProps>(), {
-  nativeType: 'button',
-  border: 'solid',
-})
-
 const { ripples, ButtonClick } = useClick()
-
-const computedColor = useColorHook(props)
-
-const _ref = ref<HTMLButtonElement>()
-
+const props = withDefaults(defineProps<ButtonProps>(), {
+  type: 'primary',
+  size: 'm',
+})
 defineOptions({
   name: 'VButton',
-})
-
-defineExpose({
-  ref: _ref,
 })
 </script>
 
 <template>
-  <div class="v-button-container">
+  <div class="ButtonContainer">
     <button
-      ref="_ref"
       class="v-button"
       @click="ButtonClick"
       :class="{
-        [`v-button--${type}`]: type,
-        [`v-button--${size}`]: size,
-        [`v-button--${border}`]: border,
-        [`v-button--${shape}`]: shape,
-        [`v-button--${size}`]: size,
-        'is-circle': circle,
-        'is-round': round,
-        'is-disabled': disabled,
+        [`v-button-type-${props.type}`]: props.type,
+        [`v-button-shape-${props.shape}`]: props.shape,
+        [`v-button-status-${props.status}`]: props.status,
+        [`v-button-size-${props.size}`]: props.size,
+        'v-button-disabled': props.disabled,
+        'v-button-long': props.long,
       }"
-      :disabled="disabled"
-      :type="nativeType"
-      :autofocus="autofocus"
-      :style="{
-        backgroundColor: type ? `color-mix(in srgb, ${computedColor} 95%, black)` : 'var(--gray-1)',
-        boxShadow: type
-          ? `color-mix(in srgb, ${computedColor} 10%, transparent) 0px 2px 0px 0px`
-          : `color-mix(in srgb, currentColor 3%, transparent) 0px 2px 0px 0px`,
-        color: type
-          ? 'var(--text-color-light)'
-          : `color-mix(in srgb, ${computedColor} 70%, transparent)`,
-        borderColor: type
-          ? `color-mix(in srgb, ${computedColor} 50%, transparent)`
-          : 'currentColor',
-      }"
+      :disabled="props.disabled"
     >
-      <slot></slot>
+      <slot>Button</slot>
     </button>
-    <span
-      v-for="ripple in ripples"
-      :key="ripple.id"
-      class="v-button-bg"
-      :style="{
-        backgroundColor: type
-          ? `color-mix(in srgb, ${computedColor} 40%, transparent)`
-          : `color-mix(in srgb, ${computedColor || 'var(--gray-6)'} 20%, transparent)`,
-        display: _ref?.classList.contains('v-button--link') ? 'none' : 'block',
-      }"
-    ></span>
+    <div class="button-bg" v-for="ripple in ripples" :key="ripple.id"></div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 @import './style.css';
 </style>

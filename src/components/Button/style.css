@@ -1,85 +1,128 @@
-.v-button-container {
-  position: relative;
+/* 容器样式 */
+.ButtonContainer {
   display: inline-block;
+  position: relative;
+  width: 100%;
 }
-
+/* 按钮统一样式 */
 .v-button {
-  padding: var(--padding-x-small);
+  outline: none;
   border: none;
   cursor: pointer;
-  line-height: var(--line-height-9);
-  border-radius: var(--border-radius-small);
-  font-size: var(--font-size-4);
-  transition: all var(--transition-duration-2);
-  opacity: 1;
-  position: relative;
-  z-index: 1;
-  background-color: var(--gray-1);
-  border-width: 1px;
-  border-style: solid;
-  font-weight: 500;
-  border-color: color-mix(in srgb, currentColor 20%, transparent);
   white-space: nowrap;
-  opacity: 0.95;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  background-color: var(--blue-6);
+}
+/* 按钮类型样式 */
+.v-button-type-primary {
+  color: white !important;
   &:hover {
     opacity: 0.8;
-    color: var(--blue-6);
   }
   &:active {
     opacity: 1;
   }
 }
-.v-button--dashed {
-  border-style: dashed;
-}
-.v-button--dotted {
-  border-style: dotted;
-}
-.v-button--link {
-  border-style: none;
-}
-.v-button--round {
-  border-radius: 9999px;
-}
-.v-button--circle {
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-  line-height: 0;
-  padding: var(--padding-circle-1);
-}
-.v-button--small {
-  line-height: 0;
-  padding: var(--padding-xy-small);
-}
-.v-button--large {
-  padding: var(--padding-xy-large);
-  font-size: var(--font-size-5);
-}
-.is-disabled {
-  cursor: not-allowed;
-  opacity: 0.3;
+.v-button-type-secondary {
+  color: #333 !important;
+  background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
   &:hover {
-    opacity: 0.3;
+    background-color: color-mix(in srgb, currentColor 20%, black 0%) !important;
+  }
+  &:active {
+    background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
   }
 }
-
-.v-button-bg {
+.v-button-type-outline {
+  color: #333 !important;
+  background-color: color-mix(in srgb, currentColor 0%, white 100%) !important;
+  border-color: color-mix(in srgb, currentColor 15%, white 85%);
+  &:hover {
+    background-color: color-mix(in srgb, currentColor 10%, white 90%) !important;
+  }
+  &:active {
+    background-color: color-mix(in srgb, currentColor 0%, white 100%) !important;
+  }
+}
+/* 按钮尺寸样式 */
+.v-button-size-s {
+  padding: 0 8px;
+  min-width: 24px;
+  height: 24px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+.v-button-size-m {
+  padding: 0 16px;
+  min-width: 32px;
+  height: 32px;
+  font-size: inherit;
+  border-radius: 4px;
+}
+.v-button-size-l {
+  font-size: inherit;
+  padding: 0 16px;
+  min-width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+.v-button-size-xl {
+  padding: 0 24px;
+  min-width: 48px;
+  height: 48px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+/* 按钮形状样式 */
+.v-button-shape-circle {
+  padding: 0;
+  border-radius: 800px;
+}
+.v-button-shape-round {
+  border-radius: 800px;
+}
+.v-button-shape-square {
+  padding: 0;
+}
+/* 按钮状态样式 */
+.v-button-status-primary {
+  background-color: var(--blue-6);
+  color: var(--blue-6) !important;
+}
+.v-button-status-success {
+  background-color: var(--green-6);
+  color: var(--green-6) !important;
+}
+.v-button-status-warning {
+  background-color: var(--orange-6);
+  color: var(--orange-6) !important;
+}
+.v-button-status-danger {
+  background-color: var(--red-6);
+  color: var(--red-6) !important;
+}
+.v-button-type-primary.v-button-status-primary,
+.v-button-type-primary.v-button-status-success,
+.v-button-type-primary.v-button-status-warning,
+.v-button-type-primary.v-button-status-danger {
+  color: white !important;
+}
+.v-button-long {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+}
+.button-bg {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  border-radius: var(--border-radius-small);
-  animation: button-ripple var(--transition-duration-4) ease-out;
+  animation: button-ripple 0.4s ease-out;
   pointer-events: none;
   z-index: 0;
-}
-.v-button--circle ~ .v-button-bg {
-  border-radius: 50%;
-}
-
-.v-button--round ~ .v-button-bg {
-  border-radius: 9999px;
 }
 @keyframes button-ripple {
   0% {
@@ -88,21 +131,6 @@
   }
   100% {
     transform: scale(1.15, 1.45);
-    opacity: 0;
-  }
-}
-
-.v-button--circle ~ .v-button-bg {
-  animation: button-ripple-circle var(--transition-duration-4) ease-out;
-}
-
-@keyframes button-ripple-circle {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.5);
     opacity: 0;
   }
 }
