@@ -163,19 +163,19 @@
 }
 
 .button-bg-default {
-  background-color: color-mix(in srgb, currentColor 40%, transparent 60%);
+  background-color: color-mix(in srgb, currentColor, transparent 60%);
 }
 .button-bg-primary {
-  background-color: color-mix(in srgb, var(--blue-6) 80%, transparent 20%);
+  background-color: color-mix(in srgb, var(--blue-6), transparent 0%);
 }
 .button-bg-success {
-  background-color: color-mix(in srgb, var(--green-6) 80%, transparent 20%);
+  background-color: color-mix(in srgb, var(--green-6), transparent 0%);
 }
 .button-bg-warning {
-  background-color: color-mix(in srgb, var(--orange-6) 80%, transparent 20%);
+  background-color: color-mix(in srgb, var(--orange-6), transparent 0%);
 }
 .button-bg-danger {
-  background-color: color-mix(in srgb, var(--red-6) 80%, transparent 20%);
+  background-color: color-mix(in srgb, var(--red-6), transparent 0%);
 }
 
 /* 默认波纹动画（适用于round形状） */
