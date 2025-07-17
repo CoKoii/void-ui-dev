@@ -40,7 +40,7 @@ defineOptions({
   name: 'VButton',
 })
 defineExpose({
-  _ref: buttonRef,
+  ref: buttonRef,
 })
 </script>
 
