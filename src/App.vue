@@ -37,7 +37,9 @@ onMounted(() => {
           <h4>标题111</h4>
         </template>
         <template #right>
-          <VButton type="primary" status="danger" @click.stop="active = !active">按钮</VButton>
+          <VButton type="primary" status="primary" @click.stop="active = !active"
+            >Primary Button</VButton
+          >
         </template>
         <VCollapseGroup>
           <VCollapse title="一生二">
