@@ -1,20 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import type { CollapseProps } from './types'
 
 const props = withDefaults(defineProps<CollapseProps>(), {})
 const collapseContentRef = ref<HTMLDivElement | null>(null)
 const collapseRef = ref<HTMLDivElement | null>(null)
 const show = ref(props.active)
-
-watch(
-  () => props.active,
-  (newActive) => {
-    if (newActive !== show.value) {
-      changeView()
-    }
-  },
-)
 
 onMounted(() => {
   const el = collapseContentRef.value
