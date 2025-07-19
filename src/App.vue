@@ -34,7 +34,7 @@ onMounted(() => {
 <template>
   <div class="App">
     <VCollapseGroup>
-      <VCollapse title="标题">
+      <VCollapse title="标题1">
         <template #title>
           <h4>标题111</h4>
         </template>
@@ -42,7 +42,7 @@ onMounted(() => {
           <span>666</span>
         </template>
         <VCollapseGroup>
-          <VCollapse title="标题">
+          <VCollapse title="标题2">
             <template #title>
               <h4>标题111</h4>
             </template>
@@ -52,6 +52,24 @@ onMounted(() => {
             <p>这是折叠内容的示例文本。</p>
           </VCollapse>
         </VCollapseGroup>
+      </VCollapse>
+      <VCollapse title="标题3">
+        <template #title>
+          <h4>标题111</h4>
+        </template>
+        <template #right>
+          <span>666</span>
+        </template>
+        <p>这是折叠内容的示例文本。</p>
+      </VCollapse>
+      <VCollapse title="标题4">
+        <template #title>
+          <h4>标题111</h4>
+        </template>
+        <template #right>
+          <span>666</span>
+        </template>
+        <p>这是折叠内容的示例文本。</p>
       </VCollapse>
     </VCollapseGroup>
   </div>

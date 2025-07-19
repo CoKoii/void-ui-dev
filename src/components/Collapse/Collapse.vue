@@ -5,7 +5,6 @@ import type { CollapseProps } from './types'
 const props = withDefaults(defineProps<CollapseProps>(), {})
 const collapseContentRef = ref<HTMLDivElement | null>(null)
 const show = ref(false)
-const isAnimating = ref(false)
 
 onMounted(() => {
   const el = collapseContentRef.value
@@ -14,20 +13,19 @@ onMounted(() => {
 })
 
 const changeView = async () => {
-  if (isAnimating.value) return
-
   const el = collapseContentRef.value
   if (!el) return
-
-  isAnimating.value = true
   const isExpanding = !show.value
   el.removeEventListener('transitionend', handleTransitionEnd)
-
   if (isExpanding) {
     show.value = true
+    const currentHeight = el.getBoundingClientRect().height
+    el.style.height = currentHeight + 'px'
+    await nextTick()
     el.style.height = el.scrollHeight + 'px'
     el.addEventListener('transitionend', handleTransitionEnd)
   } else {
+    show.value = false
     if (el.style.height === 'auto') {
       el.style.height = el.scrollHeight + 'px'
       await nextTick()
@@ -36,7 +34,6 @@ const changeView = async () => {
       el.style.height = '0px'
       el.addEventListener('transitionend', handleTransitionEnd)
     })
-    show.value = false
   }
 }
 
@@ -49,7 +46,6 @@ const handleTransitionEnd = () => {
   }
 
   el.removeEventListener('transitionend', handleTransitionEnd)
-  isAnimating.value = false
 }
 </script>
 
