@@ -8,9 +8,6 @@ defineOptions({
 })
 
 const isDark = ref(false)
-const sayHellow = () => {
-  alert('Hello, Void UI!')
-}
 const toggleTheme = () => {
   isDark.value = !isDark.value
   if (isDark.value) {
@@ -40,7 +37,7 @@ onMounted(() => {
           <h4>标题111</h4>
         </template>
         <template #right>
-          <VButton type="outline" status="danger" @click="sayHellow">按钮</VButton>
+          <VButton type="outline" status="danger">按钮</VButton>
         </template>
         <VCollapseGroup>
           <VCollapse title="标题2">

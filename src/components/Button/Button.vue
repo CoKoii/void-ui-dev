@@ -46,12 +46,7 @@ defineExpose({
 
 <template>
   <div :class="containerClasses">
-    <button
-      ref="buttonRef"
-      :class="buttonClasses"
-      :disabled="props.disabled"
-      @click.stop="ButtonClick"
-    >
+    <button ref="buttonRef" :class="buttonClasses" :disabled="props.disabled" @click="ButtonClick">
       <slot>Button</slot>
     </button>
     <div
