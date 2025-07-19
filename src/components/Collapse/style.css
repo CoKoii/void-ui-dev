@@ -1,0 +1,34 @@
+.v-collapse-group {
+  width: 100%;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  height: auto;
+}
+.v-collapse {
+  cursor: pointer;
+}
+.v-collapse:not(:last-child) {
+  border-bottom: 1px solid #eaeaea;
+}
+.v-collapse__header {
+  display: flex;
+  padding: 12px 16px;
+  justify-content: space-between;
+  align-items: center;
+  .v-collapse__header__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    .icon {
+      user-select: none;
+    }
+  }
+}
+.v-collapse__content {
+  overflow: hidden;
+  background-color: #f5f5f5;
+  transition: height 0.3s !important;
+  .container {
+    margin: 12px 16px;
+  }
+}

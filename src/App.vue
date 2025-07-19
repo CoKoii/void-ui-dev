@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import VButton from '@/components/Button/Button.vue'
 import { ref, onMounted } from 'vue'
-
+import VCollapseGroup from '@/components/Collapse/CollapseGroup.vue'
+import VCollapse from '@/components/Collapse/Collapse.vue'
 defineOptions({
   name: 'App',
 })
@@ -28,87 +29,31 @@ onMounted(() => {
     document.body.style.backgroundColor = '#1E2025'
   }
 })
-const buttonRef = ref()
-const handleClick = () => {
-  console.log(buttonRef.value._ref)
-}
 </script>
 
 <template>
   <div class="App">
-    <VButton @click="handleClick" ref="buttonRef">主要按钮</VButton>
-    <VButton type="secondary">次要按钮</VButton>
-    <VButton type="outline">线框按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton size="s">按钮</VButton>
-    <VButton size="m">按钮</VButton>
-    <VButton size="l">按钮</VButton>
-    <VButton size="xl">按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton>默认形状</VButton>
-    <VButton shape="round">全圆角</VButton>
-    <VButton shape="circle">C</VButton>
-    <VButton shape="square">S</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton>主要按钮</VButton>
-    <VButton type="secondary">次要按钮</VButton>
-    <VButton type="outline">线框按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton status="primary">主要按钮</VButton>
-    <VButton type="secondary" status="primary">次要按钮</VButton>
-    <VButton type="outline" status="primary">线框按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton status="success">主要按钮</VButton>
-    <VButton type="secondary" status="success">次要按钮</VButton>
-    <VButton type="outline" status="success">线框按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton status="warning">主要按钮</VButton>
-    <VButton type="secondary" status="warning">次要按钮</VButton>
-    <VButton type="outline" status="warning">线框按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton status="danger">主要按钮</VButton>
-    <VButton type="secondary" status="danger">次要按钮</VButton>
-    <VButton type="outline" status="danger">线框按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton disabled>主要按钮</VButton>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <VButton long>主要按钮</VButton>
+    <VCollapseGroup>
+      <VCollapse title="标题">
+        <template #title>
+          <h4>标题111</h4>
+        </template>
+        <template #right>
+          <span>666</span>
+        </template>
+        <VCollapseGroup>
+          <VCollapse title="标题">
+            <template #title>
+              <h4>标题111</h4>
+            </template>
+            <template #right>
+              <span>666</span>
+            </template>
+            <p>这是折叠内容的示例文本。</p>
+          </VCollapse>
+        </VCollapseGroup>
+      </VCollapse>
+    </VCollapseGroup>
   </div>
 
   <!-- 主题切换按钮 -->
@@ -125,7 +70,8 @@ const handleClick = () => {
 <style scoped lang="scss">
 .App {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  padding: 0 24px;
+  grid-template-columns: repeat(1, 1fr);
   justify-items: center;
   align-items: center;
   height: 100vh;
