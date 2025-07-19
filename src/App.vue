@@ -18,6 +18,7 @@ const toggleTheme = () => {
     document.body.style.backgroundColor = ''
   }
 }
+const active = ref(false)
 onMounted(() => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   if (prefersDark) {
@@ -31,22 +32,42 @@ onMounted(() => {
 <template>
   <div class="App">
     <VCollapseGroup>
-      <VCollapse title="标题1" active>
+      <VCollapse title="道生一" :active="active">
         <template #title>
           <h4>标题111</h4>
         </template>
         <template #right>
-          <VButton type="primary" status="danger" @click.stop="toggleTheme">按钮</VButton>
+          <VButton type="primary" status="danger" @click.stop="active = !active">按钮</VButton>
         </template>
         <VCollapseGroup>
-          <VCollapse title="标题2">
+          <VCollapse title="一生二">
             <template #title>
               <h4>标题111</h4>
             </template>
             <template #right>
               <span>666</span>
             </template>
-            <p>这是折叠内容的示例文本。</p>
+            <VCollapseGroup>
+              <VCollapse title="二生三">
+                <template #title>
+                  <h4>标题111</h4>
+                </template>
+                <template #right>
+                  <span>666</span>
+                </template>
+                <VCollapseGroup>
+                  <VCollapse title="三生万物">
+                    <template #title>
+                      <h4>标题111</h4>
+                    </template>
+                    <template #right>
+                      <span>666</span>
+                    </template>
+                    <p>这是折叠内容的示例文本。</p>
+                  </VCollapse>
+                </VCollapseGroup>
+              </VCollapse>
+            </VCollapseGroup>
           </VCollapse>
         </VCollapseGroup>
       </VCollapse>
