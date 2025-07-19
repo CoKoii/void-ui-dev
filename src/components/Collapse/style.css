@@ -27,7 +27,7 @@
 .v-collapse__content {
   overflow: hidden;
   background-color: #f5f5f5;
-  transition: height 0.3s !important;
+  transition: height 0.2s !important;
   .container {
     margin: 12px 16px;
   }

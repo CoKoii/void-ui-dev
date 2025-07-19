@@ -74,7 +74,6 @@ onMounted(() => {
   grid-template-columns: repeat(1, 1fr);
   justify-items: center;
   align-items: center;
-  height: 100vh;
   overflow: hidden;
 }
 
