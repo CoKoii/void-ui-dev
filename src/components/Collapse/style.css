@@ -11,7 +11,7 @@
   border-bottom: 1px solid var(--border-color-1);
 }
 .v-collapse__header {
-  background-color: var(--bg-1);
+  background-color: var(--bg-2);
   display: flex;
   padding: var(--padding-x-12-y-16);
   justify-content: space-between;
@@ -22,11 +22,12 @@
     display: flex;
     align-items: center;
     gap: var(--gap-12);
+    letter-spacing: 2px;
   }
 }
 .v-collapse__content {
   overflow: hidden;
-  background-color: var(--bg-2);
+  background-color: var(--bg-1);
   transition:
     height var(--transition-duration-2) linear,
     opacity var(--transition-duration-2) linear;

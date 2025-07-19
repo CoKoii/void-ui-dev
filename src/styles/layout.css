@@ -9,7 +9,7 @@
   --border-radius-6: 6px;
   --border-radius-8: 8px;
   /* border颜色 */
-  --border-color-1: rgb(30 32 37 / 8%);
+  --border-color-1: rgb(30 32 37 / 0.15);
   /* gap边距 */
   --gap-12: 12px;
 }

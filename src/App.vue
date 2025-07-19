@@ -19,7 +19,6 @@ const toggleTheme = () => {
   }
 }
 onMounted(() => {
-  // 检查系统主题偏好
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   if (prefersDark) {
     isDark.value = true
@@ -31,13 +30,13 @@ onMounted(() => {
 
 <template>
   <div class="App">
-    <VCollapseGroup accordion>
+    <VCollapseGroup>
       <VCollapse title="标题1" active>
         <template #title>
           <h4>标题111</h4>
         </template>
         <template #right>
-          <VButton type="outline" status="danger">按钮</VButton>
+          <VButton type="primary" status="danger" @click.stop="toggleTheme">按钮</VButton>
         </template>
         <VCollapseGroup>
           <VCollapse title="标题2">
