@@ -33,7 +33,7 @@ onMounted(() => {
 
 <template>
   <div class="App">
-    <VCollapseGroup>
+    <VCollapseGroup accordion>
       <VCollapse title="标题1">
         <template #title>
           <h4>标题111</h4>
