@@ -8,7 +8,9 @@ defineOptions({
 })
 
 const isDark = ref(false)
-
+const sayHellow = () => {
+  alert('Hello, Void UI!')
+}
 const toggleTheme = () => {
   isDark.value = !isDark.value
   if (isDark.value) {
@@ -19,7 +21,6 @@ const toggleTheme = () => {
     document.body.style.backgroundColor = ''
   }
 }
-
 onMounted(() => {
   // 检查系统主题偏好
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -39,7 +40,7 @@ onMounted(() => {
           <h4>标题111</h4>
         </template>
         <template #right>
-          <h1 style="color: red">VIP专享</h1>
+          <VButton type="outline" status="danger" @click="sayHellow">按钮</VButton>
         </template>
         <VCollapseGroup>
           <VCollapse title="标题2">
