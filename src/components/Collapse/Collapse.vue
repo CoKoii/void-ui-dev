@@ -1,66 +1,64 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { CollapseProps } from './types'
 
 const props = withDefaults(defineProps<CollapseProps>(), {})
+const active = defineModel<boolean>('active', { default: false })
 const collapseContentRef = ref<HTMLDivElement | null>(null)
-const collapseRef = ref<HTMLDivElement | null>(null)
-const show = ref(props.active)
+const isAnimating = ref(false)
 
 onMounted(() => {
   const el = collapseContentRef.value
-  if (!el) return
-  el.style.height = show.value ? 'auto' : '0px'
+  if (el) {
+    el.style.height = active.value ? 'auto' : '0px'
+  }
 })
 
-const changeView = async () => {
+const changeView = () => {
   const el = collapseContentRef.value
-  if (!el) return
-  const isExpanding = !show.value
-  el.removeEventListener('transitionend', handleTransitionEnd)
-  if (isExpanding) {
-    show.value = true
-    const currentHeight = el.getBoundingClientRect().height
-    el.style.height = currentHeight + 'px'
-    await nextTick()
+  if (!el || isAnimating.value || props.disabled) return
+
+  isAnimating.value = true
+  active.value = !active.value
+
+  if (active.value) {
     el.style.height = el.scrollHeight + 'px'
-    el.addEventListener('transitionend', handleTransitionEnd)
+    el.addEventListener(
+      'transitionend',
+      () => {
+        if (active.value) {
+          el.style.height = 'auto'
+        }
+        isAnimating.value = false
+      },
+      { once: true },
+    )
   } else {
-    show.value = false
     if (el.style.height === 'auto') {
       el.style.height = el.scrollHeight + 'px'
-      await nextTick()
     }
     requestAnimationFrame(() => {
       el.style.height = '0px'
-      el.addEventListener('transitionend', handleTransitionEnd)
+      el.addEventListener(
+        'transitionend',
+        () => {
+          isAnimating.value = false
+        },
+        { once: true },
+      )
     })
   }
-}
-
-const handleTransitionEnd = () => {
-  const el = collapseContentRef.value
-  if (!el) return
-
-  if (show.value) {
-    el.style.height = 'auto'
-  }
-
-  el.removeEventListener('transitionend', handleTransitionEnd)
 }
 </script>
 
 <template>
-  <div
-    class="v-collapse"
-    ref="collapseRef"
-    :id="props.title"
-    :class="{ 'is-disabled': props.disabled }"
-  >
+  <div class="v-collapse" :id="props.title" :class="{ 'is-disabled': props.disabled }">
     <div
       class="v-collapse__header"
       @click="changeView"
-      :style="{ borderBottom: show ? '1px solid var(--border-color-1)' : '1px solid transparent' }"
+      :style="{
+        borderBottom: active ? '1px solid var(--border-color-1)' : '1px solid transparent',
+      }"
     >
       <div class="v-collapse__header__left">
         <slot name="icon">→</slot>
@@ -73,7 +71,7 @@ const handleTransitionEnd = () => {
     <div
       class="v-collapse__content"
       ref="collapseContentRef"
-      :style="{ opacity: show ? '1' : '0' }"
+      :style="{ opacity: active ? '1' : '0' }"
     >
       <div class="container">
         <slot></slot>

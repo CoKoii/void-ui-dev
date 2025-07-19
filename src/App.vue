@@ -32,7 +32,7 @@ onMounted(() => {
 <template>
   <div class="App">
     <VCollapseGroup>
-      <VCollapse title="道生一" :active="active">
+      <VCollapse title="道生一" :active="true">
         <template #title>
           <h4>标题111</h4>
         </template>
