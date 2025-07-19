@@ -5,7 +5,7 @@ import type { CollapseProps } from './types'
 const props = withDefaults(defineProps<CollapseProps>(), {})
 const collapseContentRef = ref<HTMLDivElement | null>(null)
 const collapseRef = ref<HTMLDivElement | null>(null)
-const show = ref(false)
+const show = ref(props.active)
 
 onMounted(() => {
   const el = collapseContentRef.value
@@ -51,11 +51,16 @@ const handleTransitionEnd = () => {
 </script>
 
 <template>
-  <div class="v-collapse" ref="collapseRef" :id="props.title">
+  <div
+    class="v-collapse"
+    ref="collapseRef"
+    :id="props.title"
+    :class="{ 'is-disabled': props.disabled }"
+  >
     <div
       class="v-collapse__header"
       @click="changeView"
-      :style="{ borderBottom: show ? '1px solid #eaeaea' : '' }"
+      :style="{ borderBottom: show ? '1px solid var(--border-color-1)' : '1px solid transparent' }"
     >
       <div class="v-collapse__header__left">
         <slot name="icon">→</slot>
@@ -65,7 +70,11 @@ const handleTransitionEnd = () => {
         <slot name="right"></slot>
       </div>
     </div>
-    <div class="v-collapse__content" ref="collapseContentRef">
+    <div
+      class="v-collapse__content"
+      ref="collapseContentRef"
+      :style="{ opacity: show ? '1' : '0' }"
+    >
       <div class="container">
         <slot></slot>
       </div>

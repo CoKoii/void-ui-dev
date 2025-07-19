@@ -1,4 +1,7 @@
 :root {
+  /* 背景色 */
+  --bg-1: #ffffff;
+  --bg-2: #f6f6f6;
   /* 中性色 */
   --gray-1: #ffffff;
   --gray-2: #fafafa;

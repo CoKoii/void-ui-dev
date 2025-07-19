@@ -34,12 +34,12 @@ onMounted(() => {
 <template>
   <div class="App">
     <VCollapseGroup accordion>
-      <VCollapse title="标题1">
+      <VCollapse title="标题1" active>
         <template #title>
           <h4>标题111</h4>
         </template>
         <template #right>
-          <span>666</span>
+          <h1 style="color: red">VIP专享</h1>
         </template>
         <VCollapseGroup>
           <VCollapse title="标题2">
@@ -62,7 +62,7 @@ onMounted(() => {
         </template>
         <p>这是折叠内容的示例文本。</p>
       </VCollapse>
-      <VCollapse title="标题4">
+      <VCollapse title="标题4" disabled>
         <template #title>
           <h4>标题111</h4>
         </template>
