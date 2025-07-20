@@ -29,8 +29,6 @@
 .v-collapse__content {
   overflow: hidden;
   background-color: var(--bg-1);
-  transition: opacity var(--transition-duration-2) linear;
-  opacity: 1;
   .container {
     margin: var(--padding-x-12-y-16);
   }
@@ -45,12 +43,16 @@
 .collapse-enter-active,
 .collapse-leave-active {
   transition:
-    height 0.2s ease-in-out,
-    opacity 0.2s ease-in-out;
+    height var(--transition-duration-2) linear,
+    opacity var(--transition-duration-2) linear;
   overflow: hidden;
 }
 
 .collapse-enter-from,
+.collapse-leave-to {
+  height: 0px;
+  opacity: 0;
+}
 .collapse-leave-to {
   height: 0px;
   opacity: 0;
