@@ -3,6 +3,7 @@ import VButton from '@/components/Button/Button.vue'
 import { ref, onMounted } from 'vue'
 import VCollapseGroup from '@/components/Collapse/CollapseGroup.vue'
 import VCollapse from '@/components/Collapse/Collapse.vue'
+import VIcon from '@/components/Icon/Icon.vue'
 defineOptions({
   name: 'App',
 })
@@ -47,7 +48,7 @@ onMounted(() => {
               <h4>标题111</h4>
             </template>
             <template #right>
-              <span>666</span>
+              <VIcon icon="arrow-up" size="2xl" spin />
             </template>
             <VCollapseGroup>
               <VCollapse title="二生三">
