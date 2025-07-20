@@ -30,9 +30,7 @@
 .v-collapse__content {
   overflow: hidden;
   background-color: var(--bg-1);
-  transition:
-    height var(--transition-duration-2) linear,
-    opacity var(--transition-duration-2) linear;
+  transition: opacity var(--transition-duration-2) linear;
   opacity: 1;
   .container {
     margin: var(--padding-x-12-y-16);
@@ -44,4 +42,14 @@
   .v-collapse__header {
     pointer-events: none;
   }
+}
+.collapse-enter-active,
+.collapse-leave-active {
+  transition: height 0.3s ease;
+  overflow: hidden;
+}
+
+.collapse-enter-from,
+.collapse-leave-to {
+  height: 0px;
 }

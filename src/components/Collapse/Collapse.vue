@@ -1,53 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import type { CollapseProps } from './types'
-
 const props = withDefaults(defineProps<CollapseProps>(), {})
 const active = defineModel<boolean>('active', { default: false })
-const collapseContentRef = ref<HTMLDivElement | null>(null)
-const isAnimating = ref(false)
-
-onMounted(() => {
-  const el = collapseContentRef.value
-  if (el) {
-    el.style.height = active.value ? 'auto' : '0px'
+const toggle = () => {
+  if (!props.disabled) {
+    active.value = !active.value
   }
-})
-
-const changeView = () => {
-  const el = collapseContentRef.value
-  if (!el || isAnimating.value || props.disabled) return
-
-  isAnimating.value = true
-  active.value = !active.value
-
-  if (active.value) {
-    el.style.height = el.scrollHeight + 'px'
-    el.addEventListener(
-      'transitionend',
-      () => {
-        if (active.value) {
-          el.style.height = 'auto'
-        }
-        isAnimating.value = false
-      },
-      { once: true },
-    )
-  } else {
-    if (el.style.height === 'auto') {
-      el.style.height = el.scrollHeight + 'px'
-    }
-    requestAnimationFrame(() => {
-      el.style.height = '0px'
-      el.addEventListener(
-        'transitionend',
-        () => {
-          isAnimating.value = false
-        },
-        { once: true },
-      )
-    })
-  }
+}
+const onEnter = (el: Element) => {
+  ;(el as HTMLElement).style.height = `${el.scrollHeight}px`
+}
+const onAfterEnter = (el: Element) => {
+  ;(el as HTMLElement).style.height = 'auto'
+}
+const onBeforeLeave = (el: Element) => {
+  ;(el as HTMLElement).style.height = `${el.scrollHeight}px`
+}
+const onLeave = (el: Element) => {
+  ;(el as HTMLElement).style.height = '0px'
 }
 </script>
 
@@ -55,7 +25,11 @@ const changeView = () => {
   <div class="v-collapse" :id="props.title" :class="{ 'is-disabled': props.disabled }">
     <div
       class="v-collapse__header"
-      @click="changeView"
+      role="button"
+      :aria-disabled="props.disabled"
+      :aria-expanded="active"
+      tabindex="0"
+      @click="toggle"
       :style="{
         borderBottom: active ? '1px solid var(--border-color-1)' : '1px solid transparent',
       }"
@@ -68,15 +42,19 @@ const changeView = () => {
         <slot name="right"></slot>
       </div>
     </div>
-    <div
-      class="v-collapse__content"
-      ref="collapseContentRef"
-      :style="{ opacity: active ? '1' : '0' }"
+    <Transition
+      name="collapse"
+      @enter="onEnter"
+      @after-enter="onAfterEnter"
+      @before-leave="onBeforeLeave"
+      @leave="onLeave"
     >
-      <div class="container">
-        <slot></slot>
+      <div v-show="active" class="v-collapse__content" :aria-hidden="!active">
+        <div class="container">
+          <slot></slot>
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
