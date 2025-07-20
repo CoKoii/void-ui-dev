@@ -1,23 +1,40 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { CollapseProps } from './types'
+
 const props = withDefaults(defineProps<CollapseProps>(), {})
 const active = defineModel<boolean>('active', { default: false })
+const showBorder = ref(active.value)
+
 const toggle = () => {
   if (!props.disabled) {
     active.value = !active.value
   }
 }
+
 const onEnter = (el: Element) => {
-  ;(el as HTMLElement).style.height = `${el.scrollHeight}px`
+  showBorder.value = true
+  const element = el as HTMLElement
+  element.style.height = '0px'
+  element.style.opacity = '0'
+  element.style.height = `${el.scrollHeight}px`
+  element.style.opacity = '1'
 }
 const onAfterEnter = (el: Element) => {
-  ;(el as HTMLElement).style.height = 'auto'
+  const element = el as HTMLElement
+  element.style.height = 'auto'
 }
 const onBeforeLeave = (el: Element) => {
-  ;(el as HTMLElement).style.height = `${el.scrollHeight}px`
+  const element = el as HTMLElement
+  element.style.height = `${el.scrollHeight}px`
 }
 const onLeave = (el: Element) => {
-  ;(el as HTMLElement).style.height = '0px'
+  const element = el as HTMLElement
+  element.style.height = '0px'
+  element.style.opacity = '0'
+}
+const onAfterLeave = () => {
+  showBorder.value = false
 }
 </script>
 
@@ -31,7 +48,7 @@ const onLeave = (el: Element) => {
       tabindex="0"
       @click="toggle"
       :style="{
-        borderBottom: active ? '1px solid var(--border-color-1)' : '1px solid transparent',
+        borderBottom: showBorder ? '1px solid var(--border-color-1)' : '1px solid transparent',
       }"
     >
       <div class="v-collapse__header__left">
@@ -48,6 +65,7 @@ const onLeave = (el: Element) => {
       @after-enter="onAfterEnter"
       @before-leave="onBeforeLeave"
       @leave="onLeave"
+      @after-leave="onAfterLeave"
     >
       <div v-show="active" class="v-collapse__content" :aria-hidden="!active">
         <div class="container">

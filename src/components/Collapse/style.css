@@ -17,7 +17,6 @@
   display: flex;
   padding: var(--padding-x-12-y-16);
   justify-content: space-between;
-  transition: border var(--transition-duration-2);
   align-items: center;
   user-select: none;
   .v-collapse__header__left {
@@ -45,11 +44,19 @@
 }
 .collapse-enter-active,
 .collapse-leave-active {
-  transition: height 0.3s ease;
+  transition:
+    height 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
   overflow: hidden;
 }
 
 .collapse-enter-from,
 .collapse-leave-to {
   height: 0px;
+  opacity: 0;
+}
+
+.collapse-enter-to,
+.collapse-leave-from {
+  opacity: 1;
 }
