@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import type { FontAwesomeIconProps } from '@fortawesome/vue-fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import type { IconProps } from './types'
 defineOptions({
   name: 'VIcon',
   inheritAttrs: false,
 })
-const props = defineProps<FontAwesomeIconProps>()
+const props = defineProps<IconProps>()
 </script>
 
 <template>
   <i class="v-icon">
-    <FontAwesomeIcon v-bind="props" />
+    <FontAwesomeIcon v-bind="props" :style="{ color: props.color }" />
   </i>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped>
+@import './style.css';
+</style>

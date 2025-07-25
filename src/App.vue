@@ -48,7 +48,7 @@ onMounted(() => {
               <h4>标题111</h4>
             </template>
             <template #right>
-              <VIcon icon="arrow-up" size="2xl" spin />
+              <VIcon icon="arrow-up" />
             </template>
             <VCollapseGroup>
               <VCollapse title="二生三">
