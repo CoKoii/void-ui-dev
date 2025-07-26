@@ -10,4 +10,6 @@ export interface ButtonProps {
   disabled?: boolean
   loading?: boolean
   long?: boolean
+  icon?: string
+  iconPosition?: 'left' | 'right'
 }

@@ -19,7 +19,14 @@ const toggleTheme = () => {
     document.body.style.backgroundColor = ''
   }
 }
-const active = ref(false)
+const loading = ref(false)
+const startLoading = () => {
+  if (loading.value) return
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 1000)
+}
 onMounted(() => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   if (prefersDark) {
@@ -38,8 +45,16 @@ onMounted(() => {
           <h4>标题111</h4>
         </template>
         <template #right>
-          <VButton type="primary" status="primary" @click.stop="active = !active"
-            >Primary Button</VButton
+          <VButton
+            type="primary"
+            status="primary"
+            @click.stop="startLoading"
+            :loading="loading"
+            :icon="'plus'"
+            size="l"
+            :icon-position="'right'"
+          >
+            Primary Button</VButton
           >
         </template>
         <VCollapseGroup>

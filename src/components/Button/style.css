@@ -22,6 +22,10 @@
   position: relative;
   user-select: none;
   font-weight: var(--font-weight-500);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-12);
   &:hover,
   &:focus,
   &:active {
@@ -131,9 +135,8 @@
 }
 
 /* 按钮禁用和长按钮样式 */
-.v-button-disabled,
-.v-button-disabled:hover {
-  cursor: not-allowed;
+.v-button-disabled {
+  pointer-events: none;
   opacity: 0.3;
 }
 .v-button-long {
