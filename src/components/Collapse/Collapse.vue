@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { CollapseProps } from './types'
-
+import VIcon from '@/components/Icon/Icon.vue'
 const props = withDefaults(defineProps<CollapseProps>(), {})
 const active = defineModel<boolean>('active', { default: false })
 const showBorder = ref(active.value)
@@ -52,7 +52,12 @@ const onAfterLeave = () => {
       }"
     >
       <div class="v-collapse__header__left">
-        <slot name="icon">→</slot>
+        <slot name="icon">
+          <VIcon
+            :icon="props.icon ? props.icon : 'angle-right'"
+            :rotation="active ? 90 : undefined"
+          />
+        </slot>
         <div>{{ props.title }}</div>
       </div>
       <div class="v-collapse__header__right">

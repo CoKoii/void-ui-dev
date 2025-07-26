@@ -5,4 +5,7 @@
   position: relative;
   fill: currentColor;
   font-size: inherit;
+  svg {
+    transition: all 0.3s linear;
+  }
 }
