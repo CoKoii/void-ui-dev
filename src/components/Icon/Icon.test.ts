@@ -24,7 +24,8 @@ describe('Icon.vue', () => {
     })
     console.log(wrapper.html())
     // 测试字体颜色样式是否正确应用
-    expect(wrapper.findComponent(FontAwesomeIcon).attributes('color')).toContain('red')
+    expect(wrapper.findComponent(FontAwesomeIcon).attributes('icon')).toBe('home')
+    expect(wrapper.findComponent(FontAwesomeIcon).attributes('color')).toBe('red')
     expect(wrapper.findComponent(FontAwesomeIcon).attributes('style')).toContain('color: red')
   })
 })
