@@ -58,7 +58,7 @@ export default {
 
 ```vue
 <template>
-  <VThemeToggle />
+  <VThemeToggle><VButton>点击我</VButton></VThemeToggle>
 </template>
 ```
 
