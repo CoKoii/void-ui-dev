@@ -1,6 +1,6 @@
 {
   "name": "void-design-vue",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "A Vue 3 UI Component Library",
   "type": "module",
   "main": "./dist/void-design-vue.umd.cjs",
@@ -12,12 +12,22 @@
       "import": "./dist/void-design-vue.js",
       "require": "./dist/void-design-vue.umd.cjs"
     },
-    "./dist/style.css": "./dist/style.css",
-    "./*": "./*"
+    "./style": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    },
+    "./style.css": "./dist/style.css",
+    "./dist/*": "./dist/*"
   },
+  "sideEffects": [
+    "*.css",
+    "*.scss",
+    "./src/styles/*"
+  ],
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "keywords": [
     "vue",
@@ -38,9 +48,10 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
-    "build:lib": "run-s clean build:vite build:types",
+    "build:lib": "run-s clean build:vite build:types build:post",
     "build:vite": "vite build --config vite.lib.config.ts",
     "build:types": "vue-tsc --project tsconfig.build.json",
+    "build:post": "node scripts/post-build.mjs",
     "clean": "rm -rf dist",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -48,7 +59,8 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "prepublishOnly": "npm run build:lib"
+    "prepublishOnly": "npm run build:lib",
+    "lazy": "node scripts/auto-publish.mjs"
   },
   "dependencies": {
     "@ant-design/colors": "^7.2.1",
