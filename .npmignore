@@ -1,0 +1,26 @@
+# 开发相关文件
+src/
+public/
+.vscode/
+.git/
+tests/
+
+# 构建配置文件
+vite.config.ts
+vite.lib.config.ts
+tsconfig*.json
+vitest.config.ts
+eslint.config.ts
+
+# 开发依赖和工具
+node_modules/
+.env*
+.gitignore
+.eslintrc*
+.prettierrc*
+
+# 其他开发文件
+*.log
+.DS_Store
+coverage/
+.nyc_output/

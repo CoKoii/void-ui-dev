@@ -1,45 +1,105 @@
-# vue-project
+# Void Design Vue
 
-This template should help get you started developing with Vue 3 in Vite.
+一个基于 Vue 3 的轻量级 UI 组件库。
 
-## Recommended IDE Setup
+## 安装
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+```bash
+npm install void-design-vue
+# 或
+pnpm add void-design-vue
+# 或
+yarn add void-design-vue
+```
 
-## Type Support for `.vue` Imports in TS
+## 完整引入
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+```typescript
+import { createApp } from 'vue'
+import { install } from 'void-design-vue'
+import 'void-design-vue/dist/style.css'
+import App from './App.vue'
 
-## Customize configuration
+const app = createApp(App)
+app.use(install)
+app.mount('#app')
+```
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 按需引入
 
-## Project Setup
+```typescript
+import { VButton, VThemeToggle } from 'void-design-vue'
+import 'void-design-vue/dist/style.css'
 
-```sh
+// 在组件中使用
+export default {
+  components: {
+    VButton,
+    VThemeToggle,
+  },
+}
+```
+
+## 组件列表
+
+### VButton
+
+基础按钮组件
+
+```vue
+<template>
+  <VButton>点击我</VButton>
+</template>
+```
+
+### VThemeToggle
+
+主题切换组件，支持明暗主题切换
+
+```vue
+<template>
+  <VThemeToggle />
+</template>
+```
+
+#### Props
+
+| 属性名       | 类型    | 默认值        | 说明                 |
+| ------------ | ------- | ------------- | -------------------- |
+| lightTheme   | string  | 'light'       | 浅色主题名称         |
+| darkTheme    | string  | 'dark'        | 深色主题名称         |
+| persistent   | boolean | false         | 是否持久化主题设置   |
+| followSystem | boolean | false         | 是否跟随系统主题     |
+| duration     | number  | 450           | 切换动画持续时间(ms) |
+| easing       | string  | 'ease-in-out' | 切换动画缓动函数     |
+
+## TypeScript 支持
+
+本库完全支持 TypeScript，包含完整的类型定义。
+
+```typescript
+import type { ThemeToggleProps, ThemeToggleEmits } from 'void-design-vue'
+```
+
+## 开发
+
+```bash
+# 安装依赖
 pnpm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# 开发模式
 pnpm dev
-```
 
-### Type-Check, Compile and Minify for Production
+# 构建库
+pnpm build:lib
 
-```sh
-pnpm build
-```
+# 类型检查
+pnpm type-check
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
+# 测试
 pnpm test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## License
 
-```sh
-pnpm lint
-```
+MIT
