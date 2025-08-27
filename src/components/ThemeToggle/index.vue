@@ -78,7 +78,6 @@ const setTheme = (next: string) => {
 const getNextTheme = (): string =>
   getTheme() === props.darkTheme ? props.lightTheme : props.darkTheme
 
-// ---------- 动画 ----------
 const getPoint = (e?: MouseEvent | PointerEvent) => ({
   x: e?.clientX ?? innerWidth / 2,
   y: e?.clientY ?? innerHeight / 2,
@@ -174,7 +173,7 @@ defineExpose({
 <style>
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+  animation: none !important;
+  mix-blend-mode: normal !important;
 }
 </style>

@@ -12,7 +12,6 @@
   &:focus {
     color: color-mix(in srgb, var(--vtheme-color) 80%, white);
   }
-
   &:active {
     color: color-mix(in srgb, var(--vtheme-color) 80%, black);
   }
