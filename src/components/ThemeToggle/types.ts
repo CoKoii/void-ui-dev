@@ -11,4 +11,5 @@ export interface ThemeToggleProps {
   followSystem?: boolean
   duration?: number
   easing?: string
+  maxRadius?: number
 }

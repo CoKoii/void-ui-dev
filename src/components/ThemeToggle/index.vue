@@ -95,7 +95,7 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   const r = calcRadius(x, y)
 
   // 半径过大时退化处理，避免低端机掉帧
-  if (r > 2000) {
+  if (props.maxRadius && r > props.maxRadius) {
     setTheme(next)
     animating = false
     return
