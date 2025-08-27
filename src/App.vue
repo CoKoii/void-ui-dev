@@ -1,20 +1,34 @@
 <script setup lang="ts">
+import { Button, Space } from 'ant-design-vue'
 defineOptions({
   name: 'App',
 })
 import VThemeToggle from './components/ThemeToggle/index.vue'
-const toggleTheme = () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme')
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
-  document.documentElement.setAttribute('data-theme', newTheme)
-}
 </script>
 
 <template>
   <div class="App">
-    <VThemeToggle :onToggle="toggleTheme">
+    <VThemeToggle
+      lightTheme="light"
+      darkTheme="dark"
+      :persistent="true"
+      :followSystem="true"
+      :duration="480"
+      @theme-change="
+        (theme: string) => {
+          console.log('Theme changed to:', theme)
+        }
+      "
+    >
       <button>切换日夜间</button>
     </VThemeToggle>
+    <Space wrap>
+      <Button type="primary">Primary Button</Button>
+      <Button>Default Button</Button>
+      <Button type="dashed">Dashed Button</Button>
+      <Button type="text">Text Button</Button>
+      <Button type="link">Link Button</Button>
+    </Space>
   </div>
 </template>
 
