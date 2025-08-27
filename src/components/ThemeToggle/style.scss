@@ -1,4 +1,19 @@
 .VThemeToggle {
   all: unset;
   cursor: pointer;
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+}
+.VThemeToggle__label {
+  color: var(--vtheme-color);
+  transition: all 0.3s;
+  &:hover,
+  &:focus {
+    color: color-mix(in srgb, var(--vtheme-color) 80%, white);
+  }
+
+  &:active {
+    color: color-mix(in srgb, var(--vtheme-color) 80%, black);
+  }
 }

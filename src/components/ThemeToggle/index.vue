@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<ThemeToggleProps>(), {
   lightTheme: 'light',
   darkTheme: 'dark',
   persistent: false,
-  followSystem: false,
+  followSystem: true,
   duration: 450,
   easing: 'ease-in-out',
 })
@@ -21,8 +21,6 @@ const currentTheme = ref<string>('')
 const isSystemDark = ref(false)
 const storageKey = 'theme'
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-
-// ---------- Storage 优化：延迟写入 ----------
 let storageCache: string | null = null
 const getStoredTheme = (): string | null => {
   if (!props.persistent) return null
@@ -48,7 +46,6 @@ const removeStoredTheme = () => {
   } catch {}
 }
 
-// ---------- Theme 相关 ----------
 const getInitialTheme = (): string => {
   if (props.followSystem) {
     return isSystemDark.value ? props.darkTheme : props.lightTheme
@@ -58,7 +55,14 @@ const getInitialTheme = (): string => {
   return props.lightTheme
 }
 
-const getTheme = (): string => currentTheme.value
+const getTheme = (): string => {
+  const domTheme = root.getAttribute('data-theme')
+  if (domTheme) {
+    currentTheme.value = domTheme
+    return domTheme
+  }
+  return currentTheme.value
+}
 
 const setTheme = (next: string) => {
   currentTheme.value = next
@@ -86,15 +90,12 @@ let animating = false
 const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   if (animating) return
   const next = getNextTheme()
-
-  // 不支持 View Transition，直接切换
   if (!document.startViewTransition) return setTheme(next)
 
   animating = true
   const { x, y } = getPoint(e)
   const r = calcRadius(x, y)
 
-  // 半径过大时退化处理，避免低端机掉帧
   if (props.maxRadius && r > props.maxRadius) {
     setTheme(next)
     animating = false
@@ -120,7 +121,6 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   }
 }
 
-// ---------- 系统主题跟随 ----------
 const handleSystemThemeChange = (e: MediaQueryListEvent) => {
   isSystemDark.value = e.matches
   if (props.followSystem) {
@@ -142,7 +142,6 @@ watch(
   },
 )
 
-// ---------- 生命周期 ----------
 onMounted(() => {
   isSystemDark.value = mediaQuery.matches
   setTheme(getInitialTheme())
@@ -153,7 +152,6 @@ onUnmounted(() => {
   mediaQuery.removeEventListener('change', handleSystemThemeChange)
 })
 
-// ---------- 暴露 API ----------
 defineExpose({
   currentTheme,
   toggleTheme,
@@ -163,7 +161,9 @@ defineExpose({
 
 <template>
   <button class="VThemeToggle" type="button" @click="toggleTheme($event)" aria-label="切换主题">
-    <slot />
+    <slot>
+      <span class="VThemeToggle__label" style="--vtheme-color: var(--color-primary)">切换主题</span>
+    </slot>
   </button>
 </template>
 

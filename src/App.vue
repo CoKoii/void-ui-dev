@@ -22,6 +22,7 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
     >
       <button>切换日夜间</button>
     </VThemeToggle>
+    <VThemeToggle> </VThemeToggle>
     <Space wrap>
       <Button type="primary">Primary Button</Button>
       <Button>Default Button</Button>
@@ -38,5 +39,6 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
   height: 100vh;
   overflow: auto;
   background-color: var(--gray-1);
+  display: grid;
 }
 </style>
