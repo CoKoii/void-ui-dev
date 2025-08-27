@@ -1,6 +1,6 @@
 {
   "name": "void-design-vue",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A Vue 3 UI Component Library",
   "type": "module",
   "main": "./dist/void-design-vue.umd.cjs",
