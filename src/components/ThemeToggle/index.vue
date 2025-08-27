@@ -9,7 +9,7 @@ const props = withDefaults(defineProps<ThemeToggleProps>(), {
   darkTheme: 'dark',
   persistent: false,
   followSystem: false,
-  duration: 480,
+  duration: 450,
   easing: 'ease-in-out',
 })
 
