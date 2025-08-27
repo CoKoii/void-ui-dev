@@ -10,10 +10,6 @@ export default defineConfig({
   server: {
     open: true,
   },
-  base: '/void-ui-dev/',
-  build: {
-    outDir: 'docs',
-  },
   plugins: [vue(), vueJsx(), vueDevTools()],
   resolve: {
     alias: {
