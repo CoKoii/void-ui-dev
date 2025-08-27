@@ -136,14 +136,18 @@ class LazyPublisher {
 
     // 更新 index.ts
     const indexTs = `import type { App } from 'vue'
+import { version } from './version'
 
-// 自动生成导入
+// 组件导入
 ${components.map((c) => `import ${c.componentName} from './components/${c.name}/index.vue'`).join('\n')}
 
+// 样式导入
 import './styles/main.scss'
 
+// 组件列表
 const components = [${components.map((c) => c.componentName).join(', ')}] as const
 
+// 安装函数
 const install = (app: App): void => {
   components.forEach((component) => {
     if (component.name) {
@@ -152,12 +156,16 @@ const install = (app: App): void => {
   })
 }
 
-const version = '__VERSION__'
-
+// 默认导出
 const VoidDesignVue = { install, version }
 
+// 组件导出
 export { ${components.map((c) => c.componentName).join(', ')} }
+
+// 类型导出
 export * from './components'
+
+// 插件导出
 export { install, version }
 export default VoidDesignVue`
 
@@ -178,10 +186,11 @@ export default VoidDesignVue`
     await fs.writeFile(indexPath, content)
   }
 
-  // 构建
+  // 构建项目
   async build() {
-    console.log('🔨 构建中...')
-    return this.runCommand('npm', ['run', 'build:lib'])
+    console.log('🔨 开始构建...')
+    await this.runCommand('npm', ['run', 'build'])
+    console.log('✅ 构建完成')
   }
 
   // 发布
@@ -191,10 +200,11 @@ export default VoidDesignVue`
   }
 
   // 运行命令
-  runCommand(command, args) {
+  runCommand(command, args = []) {
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, { cwd: rootDir, stdio: 'inherit' })
       child.on('close', (code) => (code === 0 ? resolve() : reject(new Error(`命令失败: ${code}`))))
+      child.on('error', reject)
     })
   }
 

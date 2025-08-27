@@ -1,6 +1,6 @@
 {
   "name": "void-design-vue",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "A Vue 3 UI Component Library",
   "type": "module",
   "main": "./dist/void-design-vue.umd.cjs",
@@ -12,29 +12,23 @@
       "import": "./dist/void-design-vue.js",
       "require": "./dist/void-design-vue.umd.cjs"
     },
-    "./style": {
-      "import": "./dist/style.css",
-      "require": "./dist/style.css"
-    },
-    "./style.css": "./dist/style.css",
-    "./dist/*": "./dist/*"
+    "./style": "./dist/style.css",
+    "./style.css": "./dist/style.css"
   },
   "sideEffects": [
     "*.css",
-    "*.scss",
-    "./src/styles/*"
+    "*.scss"
   ],
   "files": [
-    "dist",
-    "README.md",
-    "CHANGELOG.md"
+    "dist"
   ],
   "keywords": [
     "vue",
     "vue3",
     "ui",
     "components",
-    "library"
+    "library",
+    "design-system"
   ],
   "author": "Your Name",
   "license": "MIT",
@@ -43,34 +37,34 @@
     "url": "git+https://github.com/CoKoii/void-ui-dev.git"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": ">=18"
   },
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "build:lib": "run-s clean build:vite build:types build:post",
+    "build": "npm run clean && npm run build:lib && npm run build:post",
+    "build:lib": "npm run build:vite && npm run build:types",
     "build:vite": "vite build --config vite.lib.config.ts",
     "build:types": "vue-tsc --project tsconfig.build.json",
     "build:post": "node scripts/post-build.mjs",
     "clean": "rm -rf dist",
     "preview": "vite preview",
-    "test:unit": "vitest",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build",
+    "test": "vitest",
+    "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/",
-    "prepublishOnly": "npm run build:lib",
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run build",
+    "publish:patch": "npm version patch && npm publish",
+    "publish:minor": "npm version minor && npm publish",
+    "publish:major": "npm version major && npm publish",
     "lazy": "node scripts/auto-publish.mjs"
   },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
   "dependencies": {
-    "@ant-design/colors": "^7.2.1",
-    "sass": "^1.91.0",
-    "vue": "^3.5.18"
+    "@ant-design/colors": "^7.2.1"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.2",
-    "@types/glob": "^9.0.0",
-    "@types/jsdom": "^21.1.7",
     "@types/node": "^22.16.5",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^5.0.1",
@@ -78,18 +72,15 @@
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.6.0",
     "@vue/test-utils": "^2.4.6",
-    "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "~10.3.0",
-    "glob": "^11.0.3",
-    "jiti": "^2.4.2",
     "jsdom": "^26.1.0",
-    "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
+    "sass": "^1.91.0",
     "typescript": "~5.8.0",
     "vite": "^7.0.6",
-    "vite-plugin-vue-devtools": "^8.0.0",
     "vitest": "^3.2.4",
+    "vue": "^3.5.18",
     "vue-tsc": "^3.0.4"
   }
 }

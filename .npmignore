@@ -1,30 +1,21 @@
-# 源代码目录
+# 源代码和构建配置
 src/
 public/
 scripts/
+*.config.*
+tsconfig*.json
+.env*
 
-# 开发工具配置
+# 开发工具和配置
 .vscode/
 .git/
 .github/
-tests/
-__tests__/
-
-# 构建配置文件
-vite.config.ts
-vite.lib.config.ts
-tsconfig*.json
-vitest.config.ts
-eslint.config.ts
-
-# 开发依赖和工具
-node_modules/
-.env*
+.editorconfig
 .gitignore
 .gitattributes
 .eslintrc*
 .prettierrc*
-.editorconfig
+node_modules/
 
 # 开发文件
 *.log
@@ -33,11 +24,13 @@ coverage/
 .nyc_output/
 example.html
 index.html
-
-# 构建报告（可选，如果不想发布）
-dist/build-report.json
-
-# 开发时的临时文件
 *.tmp
 *.temp
 .cache/
+
+# 测试文件
+tests/
+__tests__/
+*.test.*
+*.spec.*
+vitest.config.*

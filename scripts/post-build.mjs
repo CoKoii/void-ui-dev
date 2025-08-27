@@ -8,14 +8,14 @@ const __dirname = resolve(fileURLToPath(import.meta.url), '..')
 const distDir = resolve(__dirname, '../dist')
 
 /**
- * 构建后处理脚本
+ * 构建后处理脚本 - 轻量化版本
  */
 async function postBuild() {
   console.log('🚀 开始执行构建后处理...')
 
   try {
-    // 1. 重命名 CSS 文件
-    await renameCssFiles()
+    // 1. 验证构建文件
+    await validateBuildFiles()
 
     // 2. 清理不必要的文件
     await cleanupFiles()
@@ -31,31 +31,18 @@ async function postBuild() {
 }
 
 /**
- * 重命名 CSS 文件，确保统一命名
+ * 验证必要的构建文件是否存在
  */
-async function renameCssFiles() {
-  try {
-    const files = await fs.readdir(distDir)
+async function validateBuildFiles() {
+  const requiredFiles = ['void-design-vue.js', 'void-design-vue.umd.cjs', 'index.d.ts', 'style.css']
 
-    // 查找 CSS 文件并重命名为 style.css
-    for (const file of files) {
-      if (file.endsWith('.css') && file !== 'style.css') {
-        const oldPath = join(distDir, file)
-        const newPath = join(distDir, 'style.css')
-
-        // 如果 style.css 已存在，先删除
-        try {
-          await fs.access(newPath)
-          await fs.unlink(newPath)
-        } catch {}
-
-        await fs.rename(oldPath, newPath)
-        console.log(`📝 重命名 CSS 文件: ${file} -> style.css`)
-        break
-      }
+  for (const file of requiredFiles) {
+    try {
+      await fs.access(join(distDir, file))
+      console.log(`✓ ${file}`)
+    } catch {
+      throw new Error(`Missing required file: ${file}`)
     }
-  } catch (error) {
-    console.warn('⚠️ CSS 文件重命名失败:', error.message)
   }
 }
 
@@ -110,9 +97,6 @@ async function generateBuildReport() {
 
     report.totalSizeFormatted = formatBytes(report.totalSize)
 
-    // 写入报告文件
-    await fs.writeFile(join(distDir, 'build-report.json'), JSON.stringify(report, null, 2))
-
     // 在控制台输出摘要
     console.log('\n📊 构建报告:')
     console.log(`总大小: ${report.totalSizeFormatted}`)
@@ -123,8 +107,8 @@ async function generateBuildReport() {
         console.log(`  ${file.name}: ${file.sizeFormatted}`)
       })
     console.log('')
-  } catch (error) {
-    console.warn('⚠️ 生成构建报告失败:', error.message)
+  } catch {
+    console.warn('⚠️ 生成构建报告失败')
   }
 }
 
