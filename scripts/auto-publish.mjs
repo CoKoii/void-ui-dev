@@ -17,6 +17,7 @@ const componentsDir = join(srcDir, 'components')
  */
 class LazyPublisher {
   constructor() {
+    this.args = this.parseArgs(process.argv.slice(2))
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -34,19 +35,24 @@ class LazyPublisher {
         `📦 发现 ${components.length} 个组件: ${components.map((c) => c.name).join(', ')}\n`,
       )
 
-      // 2. 选择版本更新
+      // 2. 生成/修复每个组件的入口 index.ts（barrel）
+      await this.ensureComponentBarrels(components)
+
+      // 3. 选择版本更新
       const versionType = await this.selectVersionType()
       const newVersion = await this.updateVersion(versionType)
 
-      // 3. 自动更新导出文件
+      // 4. 自动更新导出文件
       await this.updateExports(components)
       await this.updatePackageVersion(newVersion)
 
-      // 4. 构建
+      // 5. 构建
       await this.build()
 
-      // 5. 询问是否发布
-      const shouldPublish = await this.ask(`\n🎯 版本 ${newVersion} 构建完成，发布到 npm? (y/n): `)
+      // 6. 询问是否发布（或命令行参数指定）
+      const shouldPublish = this.args.publish
+        ? 'y'
+        : await this.ask(`\n🎯 版本 ${newVersion} 构建完成，发布到 npm? (y/n): `)
 
       if (shouldPublish.toLowerCase() === 'y') {
         await this.publish()
@@ -60,6 +66,20 @@ class LazyPublisher {
     } finally {
       this.rl.close()
     }
+  }
+
+  // 解析 CLI 参数
+  parseArgs(argv) {
+    const args = { type: null, yes: false, publish: false }
+    for (const a of argv) {
+      if (a === '--yes' || a === '-y') args.yes = true
+      else if (a === '--publish') args.publish = true
+      else if (a.startsWith('--type=')) {
+        const t = a.split('=')[1]
+        if (['major', 'minor', 'patch'].includes(t)) args.type = t
+      }
+    }
+    return args
   }
 
   // 扫描组件目录
@@ -80,6 +100,10 @@ class LazyPublisher {
 
   // 选择版本更新类型
   async selectVersionType() {
+    if (this.args.type) return this.args.type
+
+    if (this.args.yes) return 'patch'
+
     console.log('📝 选择版本更新:')
     console.log('  1. 主版本 (1.0.0 -> 2.0.0)')
     console.log('  2. 次版本 (1.0.0 -> 1.1.0)')
@@ -87,7 +111,6 @@ class LazyPublisher {
 
     const choice = await this.ask('选择 (1/2/3): ')
     const types = { 1: 'major', 2: 'minor', 3: 'patch' }
-
     if (!types[choice]) throw new Error('无效选择')
     return types[choice]
   }
@@ -170,6 +193,32 @@ export { install, version }
 export default VoidDesignVue`
 
     await fs.writeFile(join(srcDir, 'index.ts'), indexTs)
+  }
+
+  // 为每个组件生成/修复入口 index.ts（barrel）
+  async ensureComponentBarrels(components) {
+    console.log('🧱 生成/修复组件入口 (index.ts)...')
+    for (const comp of components) {
+      const compDir = join(componentsDir, comp.name)
+      const indexTsPath = join(compDir, 'index.ts')
+      const typesPath = join(compDir, 'types.ts')
+      const hasTypes = await this.exists(typesPath)
+
+      const expected =
+        `export { default } from './index.vue'\n` +
+        (hasTypes ? `export type * from './types'\n` : '')
+
+      let needWrite = true
+      if (await this.exists(indexTsPath)) {
+        const current = await fs.readFile(indexTsPath, 'utf-8')
+        if (current.trim() === expected.trim()) needWrite = false
+      }
+
+      if (needWrite) {
+        await fs.writeFile(indexTsPath, expected)
+        console.log(`  ✓ ${comp.name}/index.ts`)
+      }
+    }
   }
 
   // 更新包版本
