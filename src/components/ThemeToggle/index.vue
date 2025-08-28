@@ -2,6 +2,11 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import type { ThemeToggleProps, ThemeToggleEmits } from './types'
 
+interface ViewTransition {
+  ready: Promise<void>
+  finished: Promise<void>
+}
+
 defineOptions({ name: 'VThemeToggle' })
 
 const props = withDefaults(defineProps<ThemeToggleProps>(), {
@@ -37,9 +42,9 @@ const getStoredTheme = (): string | null => {
   }
 }
 const scheduleWrite = (fn: () => void) => {
-  const ri = (globalThis as any).requestIdleCallback as
-    | ((cb: () => void) => number)
-    | undefined
+  const ri = (
+    globalThis as typeof globalThis & { requestIdleCallback?: (cb: () => void) => number }
+  ).requestIdleCallback
   if (ri) ri(() => fn())
   else setTimeout(fn, 0)
 }
@@ -73,7 +78,9 @@ const syncColorScheme = (theme: string) => {
   if (!root) return
   const isDark = theme === props.darkTheme
   // 同步原生滚动条/表单控件的配色
-  ;(root.style as any).colorScheme = isDark ? 'dark' : 'light'
+  ;(root.style as CSSStyleDeclaration & { colorScheme?: string }).colorScheme = isDark
+    ? 'dark'
+    : 'light'
 }
 
 const setTheme = (next: string) => {
@@ -124,7 +131,7 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   const next = getNextTheme()
 
   // 无动画环境或不支持视图转换，直接切换
-  if (shouldReduceMotion() || !(document as any).startViewTransition) return setTheme(next)
+  if (shouldReduceMotion() || !('startViewTransition' in document)) return setTheme(next)
 
   animating = true
   const { x, y } = getPoint(e)
@@ -137,7 +144,9 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   }
 
   try {
-    const vt = (document as any).startViewTransition(() => setTheme(next))
+    const vt = (
+      document as Document & { startViewTransition: (callback: () => void) => ViewTransition }
+    ).startViewTransition(() => setTheme(next))
     await vt.ready
 
     await root
@@ -184,11 +193,6 @@ onMounted(() => {
 
   isSystemDark.value = !!mediaQuery.matches
 
-  // 若 light/dark 名称相同，开发环境下警告
-  if ((import.meta as any)?.env?.DEV && props.lightTheme === props.darkTheme) {
-    console.warn('[VThemeToggle] lightTheme 和 darkTheme 相同，无法切换。')
-  }
-
   const initial = getInitialTheme()
   // 如果 DOM 已有主题且等于 initial，就只同步 color-scheme；否则设置并派发事件
   const domTheme = root.getAttribute('data-theme')
@@ -224,7 +228,9 @@ defineExpose({
     @click="toggleTheme($event)"
   >
     <slot>
-      <span class="VThemeToggle__label" style="--vtheme-color: var(--v-color-primary)">切换主题</span>
+      <span class="VThemeToggle__label" style="--vtheme-color: var(--v-color-primary)"
+        >切换主题</span
+      >
     </slot>
   </button>
 </template>
