@@ -4,7 +4,6 @@ import { transformJs } from './js'
 
 const handlers: Record<string, CodeHandler> = {
   js: transformJs,
-  javascript: transformJs,
 }
 
 export function formatByLang(lang: string, code: string): string {
