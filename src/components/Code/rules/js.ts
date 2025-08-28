@@ -1,17 +1,4 @@
-<script setup lang="ts">
-defineOptions({
-  name: 'App',
-})
-import VThemeToggle from './components/ThemeToggle/index.vue'
-import VCode from './components/Code/index.vue'
-</script>
-
-<template>
-  <div class="App">
-    <VThemeToggle class="changeTheme" />
-    <VCode>
-      <pre>
-        import { escapeHtml, wrapLines } from './index'
+import { escapeHtml, wrapLines } from './index'
 
 function highlightSimpleJs(htmlEscaped: string): string {
   let result = htmlEscaped
@@ -19,7 +6,7 @@ function highlightSimpleJs(htmlEscaped: string): string {
   result = result.replace(/(['"`])(?:\\.|(?!\1).)*?\1/g, '<span style="color: #9ECBFF;">$&</span>')
 
   result = result.replace(
-    /\b(import|from)\b/g,
+    /\b(import|from|function|export|const|return)\b/g,
     '<span style="color: #ff6b6b; font-weight: 600;">$1</span>',
   )
 
@@ -39,27 +26,3 @@ export function transformJs(code: string): string {
   const highlighted = highlightSimpleJs(escaped)
   return wrapLines(highlighted)
 }
-
-      </pre>
-    </VCode>
-  </div>
-</template>
-
-<style scoped lang="scss">
-.App {
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  background-color: var(--v-page-bg-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-}
-.changeTheme {
-  position: absolute;
-  right: 30px;
-  top: 30px;
-}
-</style>

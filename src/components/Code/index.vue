@@ -1,14 +1,30 @@
 <script setup lang="ts">
-defineOptions({
-  name: 'VCode',
+import { ref, onMounted } from 'vue'
+import { formatByLang } from './rules'
+
+defineOptions({ name: 'VCode' })
+
+const props = withDefaults(defineProps<{ lang?: string }>(), { lang: 'js' })
+
+const slotEl = ref<HTMLElement | null>(null)
+const html = ref('')
+
+function runPipeline() {
+  const raw = slotEl.value?.textContent ?? ''
+  html.value = formatByLang(props.lang, raw)
+}
+
+onMounted(() => {
+  runPipeline()
 })
-const $slots = defineSlots()
-console.log($slots)
 </script>
 
 <template>
   <div class="VCode">
-    <code><slot></slot></code>
+    <!-- hidden source -->
+    <div ref="slotEl" style="display: none"><slot /></div>
+    <!-- rendered output -->
+    <code v-html="html"></code>
   </div>
 </template>
 
