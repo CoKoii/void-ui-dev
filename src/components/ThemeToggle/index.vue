@@ -76,7 +76,6 @@ const getTheme = (): string => {
   return currentTheme.value
 }
 
-// 响应式计算属性
 const isDarkTheme = computed(() => currentTheme.value === props.darkTheme)
 
 const syncColorScheme = (theme: string) => {

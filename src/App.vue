@@ -9,14 +9,8 @@ import { faSun } from '@fortawesome/free-solid-svg-icons'
 
 <template>
   <div class="App">
-    <VThemeToggle
-      @theme-change="
-        (theme: string) => {
-          console.log('Theme changed to:', theme)
-        }
-      "
-    >
-    </VThemeToggle>
+    <VThemeToggle> </VThemeToggle>
+    <VThemeToggle> </VThemeToggle>
     <span>666</span>
     <VIcon :icon="faSun" :color="'var(--v-gray-9)'" />
   </div>
