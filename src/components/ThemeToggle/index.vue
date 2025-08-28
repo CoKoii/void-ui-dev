@@ -173,7 +173,7 @@ defineExpose({
 <style>
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none !important;
-  mix-blend-mode: normal !important;
+  animation: none;
+  mix-blend-mode: normal;
 }
 </style>
