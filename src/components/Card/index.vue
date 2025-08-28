@@ -5,6 +5,7 @@ const props = withDefaults(defineProps<CardProps>(), {
   bordered: true,
 })
 const slots = defineSlots()
+
 defineOptions({
   name: 'VCard',
 })
