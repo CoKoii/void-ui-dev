@@ -249,9 +249,7 @@ defineExpose({
     @click="toggleTheme($event)"
   >
     <slot>
-      <span>
-        <VIcon :icon="isDarkTheme ? faSun : faMoon" :color="'var(--v-gray-9)'" />
-      </span>
+      <VIcon :icon="isDarkTheme ? faSun : faMoon" :color="'var(--v-gray-9)'" />
     </slot>
   </button>
 </template>

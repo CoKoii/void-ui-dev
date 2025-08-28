@@ -3,6 +3,8 @@ defineOptions({
   name: 'App',
 })
 import VThemeToggle from './components/ThemeToggle/index.vue'
+import VIcon from './components/Icon/index.vue'
+import { faSun } from '@fortawesome/free-solid-svg-icons'
 </script>
 
 <template>
@@ -15,6 +17,8 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
       "
     >
     </VThemeToggle>
+    <span>666</span>
+    <VIcon :icon="faSun" :color="'var(--v-gray-9)'" />
   </div>
 </template>
 
