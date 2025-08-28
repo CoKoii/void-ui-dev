@@ -9,6 +9,8 @@ export interface ThemeToggleProps {
   lightTheme?: string
   // 深色主题名称
   darkTheme?: string
+  // 主题键
+  themeKey?: string
   // 是否持久化主题
   persistent?: boolean
   // 是否遵循系统主题

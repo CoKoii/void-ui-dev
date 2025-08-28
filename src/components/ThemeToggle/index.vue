@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<ThemeToggleProps>(), {
   darkTheme: 'dark',
   persistent: false,
   followSystem: true,
+  themeKey: 'data-theme',
   duration: 450,
   easing: 'ease-in-out',
   storageKey: 'theme',
@@ -66,7 +67,7 @@ const removeStoredTheme = () => {
 }
 
 const getTheme = (): string => {
-  const domTheme = root?.getAttribute('data-theme')
+  const domTheme = root?.getAttribute(props.themeKey)
   if (domTheme) {
     currentTheme.value = domTheme
     return domTheme
@@ -87,7 +88,7 @@ const syncColorScheme = (theme: string) => {
 
 const setTheme = (next: string) => {
   currentTheme.value = next
-  if (root) root.setAttribute('data-theme', next)
+  if (root) root.setAttribute(props.themeKey, next)
   syncColorScheme(next)
 
   if (!props.followSystem) {
@@ -98,7 +99,7 @@ const setTheme = (next: string) => {
 }
 
 const getInitialTheme = (): string => {
-  const domTheme = root?.getAttribute('data-theme')
+  const domTheme = root?.getAttribute(props.themeKey)
   if (domTheme) return domTheme
   if (props.followSystem) {
     return isSystemDark.value ? props.darkTheme : props.lightTheme
@@ -171,7 +172,7 @@ const handleSystemThemeChange = (e: MediaQueryListEvent) => {
 
 const handleDocumentThemeChange = () => {
   if (!root) return
-  const domTheme = root.getAttribute('data-theme')
+  const domTheme = root.getAttribute(props.themeKey)
   if (domTheme && domTheme !== currentTheme.value) {
     currentTheme.value = domTheme
     syncColorScheme(domTheme)
@@ -199,7 +200,7 @@ onMounted(() => {
   isSystemDark.value = !!mediaQuery.matches
 
   const initial = getInitialTheme()
-  const domTheme = root.getAttribute('data-theme')
+  const domTheme = root.getAttribute(props.themeKey)
   if (domTheme && domTheme === initial) {
     currentTheme.value = domTheme
     syncColorScheme(domTheme)
@@ -212,7 +213,7 @@ onMounted(() => {
 
   themeObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+      if (mutation.type === 'attributes' && mutation.attributeName === props.themeKey) {
         handleDocumentThemeChange()
       }
     })
@@ -220,7 +221,7 @@ onMounted(() => {
 
   themeObserver.observe(root, {
     attributes: true,
-    attributeFilter: ['data-theme'],
+    attributeFilter: [props.themeKey],
   })
 })
 
