@@ -1,0 +1,10 @@
+.VIcon {
+  --v-icon-color: inherit;
+  color: var(--v-icon-color) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  fill: currentColor;
+  font-size: inherit;
+}

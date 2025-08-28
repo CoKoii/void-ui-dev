@@ -8,19 +8,6 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
 <template>
   <div class="App">
     <VThemeToggle
-      lightTheme="light"
-      darkTheme="dark"
-      :persistent="true"
-      :followSystem="true"
-      :duration="480"
-      @theme-change="
-        (theme: string) => {
-          console.log('Theme changed to:', theme)
-        }
-      "
-    >
-    </VThemeToggle>
-    <VThemeToggle
       @theme-change="
         (theme: string) => {
           console.log('Theme changed to:', theme)

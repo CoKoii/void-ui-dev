@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import type { ThemeToggleProps, ThemeToggleEmits } from './types'
-
+import VIcon from '../Icon/index.vue'
 interface ViewTransition {
   ready: Promise<void>
   finished: Promise<void>
@@ -248,7 +248,9 @@ defineExpose({
     @click="toggleTheme($event)"
   >
     <slot>
-      <span>{{ isDarkTheme ? '🌛' : '🌞' }}</span>
+      <span>
+        <VIcon :icon="isDarkTheme ? 'sun' : 'moon'" :color="'var(--v-gray-9)'" />
+      </span>
     </slot>
   </button>
 </template>
