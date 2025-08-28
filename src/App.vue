@@ -38,7 +38,7 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
   width: 100vw;
   height: 100vh;
   overflow: auto;
-  background-color: var(--gray-1);
+  background-color: var(--v-gray-1);
   display: grid;
 }
 </style>

@@ -161,7 +161,7 @@ defineExpose({
 <template>
   <button class="VThemeToggle" type="button" @click="toggleTheme($event)" aria-label="切换主题">
     <slot>
-      <span class="VThemeToggle__label" style="--vtheme-color: var(--color-primary)">切换主题</span>
+      <span class="VThemeToggle__label" style="--vtheme-color: var(--v-color-primary)">切换主题</span>
     </slot>
   </button>
 </template>
