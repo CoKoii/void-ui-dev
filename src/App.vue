@@ -33,4 +33,11 @@ import { faSun } from '@fortawesome/free-solid-svg-icons'
   justify-content: center;
   gap: 24px;
 }
+.icon {
+  padding: 13px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
