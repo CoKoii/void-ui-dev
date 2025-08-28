@@ -2,13 +2,14 @@ import type { App } from 'vue'
 import { version } from './version'
 
 // 组件导入
+import VIcon from './components/Icon/index.vue'
 import VThemeToggle from './components/ThemeToggle/index.vue'
 
 // 样式导入
 import './styles/main.scss'
 
 // 组件列表
-const components = [VThemeToggle] as const
+const components = [VIcon, VThemeToggle] as const
 
 // 安装函数
 const install = (app: App): void => {
@@ -23,7 +24,7 @@ const install = (app: App): void => {
 const VoidDesignVue = { install, version }
 
 // 组件导出
-export { VThemeToggle }
+export { VIcon, VThemeToggle }
 
 // 类型导出
 export * from './components'
