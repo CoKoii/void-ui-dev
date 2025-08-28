@@ -24,7 +24,6 @@ const props = withDefaults(defineProps<ThemeToggleProps>(), {
 
 const emit = defineEmits<ThemeToggleEmits>()
 
-// SSR 安全：仅在客户端初始化 root、媒体查询
 let root: HTMLElement | null = null
 const currentTheme = ref<string>('')
 
@@ -77,7 +76,6 @@ const getTheme = (): string => {
 const syncColorScheme = (theme: string) => {
   if (!root) return
   const isDark = theme === props.darkTheme
-  // 同步原生滚动条/表单控件的配色
   ;(root.style as CSSStyleDeclaration & { colorScheme?: string }).colorScheme = isDark
     ? 'dark'
     : 'light'
@@ -96,17 +94,13 @@ const setTheme = (next: string) => {
 }
 
 const getInitialTheme = (): string => {
-  // 1) DOM 已有 data-theme 优先
   const domTheme = root?.getAttribute('data-theme')
   if (domTheme) return domTheme
-  // 2) 跟随系统（与现有语义保持一致：此时忽略存储）
   if (props.followSystem) {
     return isSystemDark.value ? props.darkTheme : props.lightTheme
   }
-  // 3) 本地存储
   const stored = getStoredTheme()
   if (stored) return stored
-  // 4) 回退默认浅色
   return props.lightTheme
 }
 
@@ -130,7 +124,6 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   if (animating) return
   const next = getNextTheme()
 
-  // 无动画环境或不支持视图转换，直接切换
   if (shouldReduceMotion() || !('startViewTransition' in document)) return setTheme(next)
 
   animating = true
@@ -186,7 +179,6 @@ watch(
 )
 
 onMounted(() => {
-  // 初始化 DOM 与媒体查询（仅在客户端）
   root = document.documentElement as HTMLElement
   mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
   reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -194,7 +186,6 @@ onMounted(() => {
   isSystemDark.value = !!mediaQuery.matches
 
   const initial = getInitialTheme()
-  // 如果 DOM 已有主题且等于 initial，就只同步 color-scheme；否则设置并派发事件
   const domTheme = root.getAttribute('data-theme')
   if (domTheme && domTheme === initial) {
     currentTheme.value = domTheme
