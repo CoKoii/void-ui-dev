@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import type { ThemeToggleProps, ThemeToggleEmits } from './types'
 
 interface ViewTransition {
@@ -31,6 +31,7 @@ const isSystemDark = ref(false)
 let mediaQuery: MediaQueryList | null = null
 let reduceMotionQuery: MediaQueryList | null = null
 let storageCache: string | null = null
+let themeObserver: MutationObserver | null = null
 
 const getStoredTheme = (): string | null => {
   if (!props.persistent) return null
@@ -72,6 +73,9 @@ const getTheme = (): string => {
   }
   return currentTheme.value
 }
+
+// 响应式计算属性
+const isDarkTheme = computed(() => currentTheme.value === props.darkTheme)
 
 const syncColorScheme = (theme: string) => {
   if (!root) return
@@ -165,6 +169,15 @@ const handleSystemThemeChange = (e: MediaQueryListEvent) => {
   }
 }
 
+const handleDocumentThemeChange = () => {
+  if (!root) return
+  const domTheme = root.getAttribute('data-theme')
+  if (domTheme && domTheme !== currentTheme.value) {
+    currentTheme.value = domTheme
+    syncColorScheme(domTheme)
+  }
+}
+
 watch(
   () => props.followSystem,
   (newVal) => {
@@ -196,10 +209,25 @@ onMounted(() => {
   }
 
   mediaQuery.addEventListener('change', handleSystemThemeChange)
+
+  themeObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        handleDocumentThemeChange()
+      }
+    })
+  })
+
+  themeObserver.observe(root, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  })
 })
 
 onUnmounted(() => {
   mediaQuery?.removeEventListener('change', handleSystemThemeChange)
+  themeObserver?.disconnect()
+  themeObserver = null
 })
 
 defineExpose({
@@ -214,14 +242,12 @@ defineExpose({
     class="VThemeToggle"
     type="button"
     role="switch"
-    :aria-checked="getTheme() === props.darkTheme"
+    :aria-checked="isDarkTheme"
     :aria-label="props.ariaLabel"
     @click="toggleTheme($event)"
   >
     <slot>
-      <span class="VThemeToggle__label" style="--vtheme-color: var(--v-color-primary)"
-        >切换主题</span
-      >
+      <span>{{ isDarkTheme ? '🌛' : '🌞' }}</span>
     </slot>
   </button>
 </template>

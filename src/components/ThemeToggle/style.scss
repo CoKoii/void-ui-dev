@@ -5,20 +5,7 @@
   width: fit-content;
   height: fit-content;
   border-radius: 6px;
-  /* 键盘可见焦点 */
   &:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--vtheme-color, currentColor) 80%, transparent);
     outline-offset: 2px;
-  }
-}
-.VThemeToggle__label {
-  color: var(--vtheme-color);
-  transition: all 0.3s;
-  &:hover,
-  &:focus {
-    color: color-mix(in srgb, var(--vtheme-color) 80%, white);
-  }
-  &:active {
-    color: color-mix(in srgb, var(--vtheme-color) 80%, black);
   }
 }

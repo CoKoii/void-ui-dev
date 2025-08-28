@@ -19,9 +19,15 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
         }
       "
     >
-      <button>切换日夜间</button>
     </VThemeToggle>
-    <VThemeToggle> </VThemeToggle>
+    <VThemeToggle
+      @theme-change="
+        (theme: string) => {
+          console.log('Theme changed to:', theme)
+        }
+      "
+    >
+    </VThemeToggle>
   </div>
 </template>
 
