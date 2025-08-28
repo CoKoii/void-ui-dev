@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import type { ThemeToggleProps, ThemeToggleEmits } from './types'
 import VIcon from '../Icon/index.vue'
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 interface ViewTransition {
   ready: Promise<void>
   finished: Promise<void>
@@ -249,7 +250,7 @@ defineExpose({
   >
     <slot>
       <span>
-        <VIcon :icon="isDarkTheme ? 'sun' : 'moon'" :color="'var(--v-gray-9)'" />
+        <VIcon :icon="isDarkTheme ? faSun : faMoon" :color="'var(--v-gray-9)'" />
       </span>
     </slot>
   </button>
