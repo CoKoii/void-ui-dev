@@ -11,52 +11,57 @@ const props = withDefaults(defineProps<ThemeToggleProps>(), {
   followSystem: true,
   duration: 450,
   easing: 'ease-in-out',
+  storageKey: 'theme',
+  ariaLabel: '切换主题',
+  emitInitial: true,
+  respectReducedMotion: true,
 })
 
 const emit = defineEmits<ThemeToggleEmits>()
 
-const root = document.documentElement as HTMLElement
+// SSR 安全：仅在客户端初始化 root、媒体查询
+let root: HTMLElement | null = null
 const currentTheme = ref<string>('')
 
 const isSystemDark = ref(false)
-const storageKey = 'theme'
-const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+let mediaQuery: MediaQueryList | null = null
+let reduceMotionQuery: MediaQueryList | null = null
 let storageCache: string | null = null
+
 const getStoredTheme = (): string | null => {
   if (!props.persistent) return null
   try {
-    return localStorage.getItem(storageKey)
+    return typeof window !== 'undefined' ? window.localStorage.getItem(props.storageKey) : null
   } catch {
     return null
   }
 }
+const scheduleWrite = (fn: () => void) => {
+  const ri = (globalThis as any).requestIdleCallback as
+    | ((cb: () => void) => number)
+    | undefined
+  if (ri) ri(() => fn())
+  else setTimeout(fn, 0)
+}
 const setStoredTheme = (theme: string) => {
   if (!props.persistent) return
   storageCache = theme
-  requestIdleCallback?.(() => {
+  scheduleWrite(() => {
     try {
-      if (storageCache) localStorage.setItem(storageKey, storageCache)
+      if (storageCache && typeof window !== 'undefined')
+        window.localStorage.setItem(props.storageKey, storageCache)
     } catch {}
   })
 }
 const removeStoredTheme = () => {
   if (!props.persistent) return
   try {
-    localStorage.removeItem(storageKey)
+    if (typeof window !== 'undefined') window.localStorage.removeItem(props.storageKey)
   } catch {}
 }
 
-const getInitialTheme = (): string => {
-  if (props.followSystem) {
-    return isSystemDark.value ? props.darkTheme : props.lightTheme
-  }
-  const stored = getStoredTheme()
-  if (stored) return stored
-  return props.lightTheme
-}
-
 const getTheme = (): string => {
-  const domTheme = root.getAttribute('data-theme')
+  const domTheme = root?.getAttribute('data-theme')
   if (domTheme) {
     currentTheme.value = domTheme
     return domTheme
@@ -64,9 +69,17 @@ const getTheme = (): string => {
   return currentTheme.value
 }
 
+const syncColorScheme = (theme: string) => {
+  if (!root) return
+  const isDark = theme === props.darkTheme
+  // 同步原生滚动条/表单控件的配色
+  ;(root.style as any).colorScheme = isDark ? 'dark' : 'light'
+}
+
 const setTheme = (next: string) => {
   currentTheme.value = next
-  root.setAttribute('data-theme', next)
+  if (root) root.setAttribute('data-theme', next)
+  syncColorScheme(next)
 
   if (!props.followSystem) {
     setStoredTheme(next)
@@ -75,21 +88,43 @@ const setTheme = (next: string) => {
   emit('theme-change', next)
 }
 
+const getInitialTheme = (): string => {
+  // 1) DOM 已有 data-theme 优先
+  const domTheme = root?.getAttribute('data-theme')
+  if (domTheme) return domTheme
+  // 2) 跟随系统（与现有语义保持一致：此时忽略存储）
+  if (props.followSystem) {
+    return isSystemDark.value ? props.darkTheme : props.lightTheme
+  }
+  // 3) 本地存储
+  const stored = getStoredTheme()
+  if (stored) return stored
+  // 4) 回退默认浅色
+  return props.lightTheme
+}
+
 const getNextTheme = (): string =>
   getTheme() === props.darkTheme ? props.lightTheme : props.darkTheme
 
 const getPoint = (e?: MouseEvent | PointerEvent) => ({
-  x: e?.clientX ?? innerWidth / 2,
-  y: e?.clientY ?? innerHeight / 2,
+  x: e?.clientX ?? (typeof innerWidth !== 'undefined' ? innerWidth / 2 : 0),
+  y: e?.clientY ?? (typeof innerHeight !== 'undefined' ? innerHeight / 2 : 0),
 })
 const calcRadius = (x: number, y: number) =>
-  Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+  Math.hypot(
+    Math.max(x, (typeof innerWidth !== 'undefined' ? innerWidth : 0) - x),
+    Math.max(y, (typeof innerHeight !== 'undefined' ? innerHeight : 0) - y),
+  )
 
 let animating = false
+const shouldReduceMotion = () => props.respectReducedMotion && !!reduceMotionQuery?.matches
+
 const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   if (animating) return
   const next = getNextTheme()
-  if (!document.startViewTransition) return setTheme(next)
+
+  // 无动画环境或不支持视图转换，直接切换
+  if (shouldReduceMotion() || !(document as any).startViewTransition) return setTheme(next)
 
   animating = true
   const { x, y } = getPoint(e)
@@ -102,11 +137,11 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   }
 
   try {
-    const vt = document.startViewTransition(() => setTheme(next))
+    const vt = (document as any).startViewTransition(() => setTheme(next))
     await vt.ready
 
     await root
-      .animate(
+      ?.animate(
         { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
         {
           duration: props.duration,
@@ -142,13 +177,34 @@ watch(
 )
 
 onMounted(() => {
-  isSystemDark.value = mediaQuery.matches
-  setTheme(getInitialTheme())
+  // 初始化 DOM 与媒体查询（仅在客户端）
+  root = document.documentElement as HTMLElement
+  mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+  isSystemDark.value = !!mediaQuery.matches
+
+  // 若 light/dark 名称相同，开发环境下警告
+  if ((import.meta as any)?.env?.DEV && props.lightTheme === props.darkTheme) {
+    console.warn('[VThemeToggle] lightTheme 和 darkTheme 相同，无法切换。')
+  }
+
+  const initial = getInitialTheme()
+  // 如果 DOM 已有主题且等于 initial，就只同步 color-scheme；否则设置并派发事件
+  const domTheme = root.getAttribute('data-theme')
+  if (domTheme && domTheme === initial) {
+    currentTheme.value = domTheme
+    syncColorScheme(domTheme)
+    if (props.emitInitial) emit('theme-change', domTheme)
+  } else {
+    setTheme(initial)
+  }
+
   mediaQuery.addEventListener('change', handleSystemThemeChange)
 })
 
 onUnmounted(() => {
-  mediaQuery.removeEventListener('change', handleSystemThemeChange)
+  mediaQuery?.removeEventListener('change', handleSystemThemeChange)
 })
 
 defineExpose({
@@ -159,7 +215,14 @@ defineExpose({
 </script>
 
 <template>
-  <button class="VThemeToggle" type="button" @click="toggleTheme($event)" aria-label="切换主题">
+  <button
+    class="VThemeToggle"
+    type="button"
+    role="switch"
+    :aria-checked="getTheme() === props.darkTheme"
+    :aria-label="props.ariaLabel"
+    @click="toggleTheme($event)"
+  >
     <slot>
       <span class="VThemeToggle__label" style="--vtheme-color: var(--v-color-primary)">切换主题</span>
     </slot>

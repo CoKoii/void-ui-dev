@@ -4,6 +4,12 @@
   display: inline-block;
   width: fit-content;
   height: fit-content;
+  border-radius: 6px;
+  /* 键盘可见焦点 */
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--vtheme-color, currentColor) 80%, transparent);
+    outline-offset: 2px;
+  }
 }
 .VThemeToggle__label {
   color: var(--vtheme-color);
