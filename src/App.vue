@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Button, Space } from 'ant-design-vue'
 defineOptions({
   name: 'App',
 })
@@ -23,13 +22,6 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
       <button>切换日夜间</button>
     </VThemeToggle>
     <VThemeToggle> </VThemeToggle>
-    <Space wrap>
-      <Button type="primary">Primary Button</Button>
-      <Button>Default Button</Button>
-      <Button type="dashed">Dashed Button</Button>
-      <Button type="text">Text Button</Button>
-      <Button type="link">Link Button</Button>
-    </Space>
   </div>
 </template>
 
@@ -39,6 +31,9 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
   height: 100vh;
   overflow: auto;
   background-color: var(--v-gray-1);
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
 }
 </style>
