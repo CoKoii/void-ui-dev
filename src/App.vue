@@ -23,7 +23,6 @@ import VCode from './components/Code/index.vue'
 <style scoped lang="scss">
 .App {
   width: 100vw;
-  height: 100vh;
   overflow: auto;
   background-color: var(--v-page-bg-color);
   display: flex;
