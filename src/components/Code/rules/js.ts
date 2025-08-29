@@ -37,111 +37,198 @@ function highlightParamList(list: string): string {
     /\.\.\.\s*([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
     (_m, name: string) => `...${COLOR.paramName(name)}`,
   )
-
   s = s.replace(
     /(^|[,(]\s*)(?:(?:public|private|protected|readonly|override)\s+)*(this|[a-zA-Z_$][a-zA-Z0-9_$]*)(\?)?\s*:/g,
     (_m: string, prefix: string, name: string, opt: string | undefined) =>
       `${prefix}${name === 'this' ? name : COLOR.paramName(name)}${opt || ''}:`,
   )
-
   s = s.replace(
     /(^|[,(]\s*)(?:(?:public|private|protected|readonly|override)\s+)*(this|[a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g,
     (_m: string, prefix: string, name: string) =>
       `${prefix}${name === 'this' ? name : COLOR.paramName(name)}=`,
   )
-
   s = s.replace(
     /(^|[,(]\s*)(?:(?:public|private|protected|readonly|override)\s+)*(?!this\b)([a-zA-Z_$][a-zA-Z0-9_$]*)(?=\s*(?:\?|,|\)|$))/g,
     (_m: string, prefix: string, name: string) =>
       `${prefix}${RESERVED_PARAM_TOKENS.has(name) ? name : COLOR.paramName(name)}`,
   )
-
   s = s.replace(
     /([\{,]\s*[a-zA-Z_$][a-zA-Z0-9_$]*\s*:\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
     (_m: string, pre: string, name: string) => `${pre}${COLOR.paramName(name)}`,
   )
-
   s = s.replace(
     /([\{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)(?=\s*(?:,|\}|=))/g,
     (_m: string, pre: string, name: string) => `${pre}${COLOR.paramName(name)}`,
   )
-
   s = s.replace(
     /([\[,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)(?=\s*(?:,|\]|=))/g,
     (_m: string, pre: string, name: string) => `${pre}${COLOR.paramName(name)}`,
   )
-
   return s
 }
 
-function applyPlainHighlight(s: string): string {
+function applyGlobalHighlights(s: string): string {
   let out = s
   out = out.replace(RE.colorHex, (_m, hex: string) => COLOR.colorTokenBg(hex))
-  out = out.replace(
-    RE.funcParamsDecl,
-    (_m, open: string, inside: string, close: string) =>
-      `${open}${highlightParamList(inside)}${close}`,
-  )
-  out = out.replace(
-    RE.arrowParamsParen,
-    (_m, inside: string, after: string) => `(${highlightParamList(inside)})${after}`,
-  )
-  out = out.replace(
-    RE.arrowParamSingle,
-    (_m, name: string, arrow: string) => `${COLOR.paramName(name)}${arrow}`,
-  )
   out = out.replace(RE.varDecl, (_m, kw: string, name: string) => COLOR.varName(kw, name))
   out = out.replace(RE.keywords, COLOR.keyword)
   out = out.replace(RE.funcNameCall, COLOR.funcName)
   return out
 }
 
-function highlightSimpleJs(htmlEscaped: string): string {
-  const paramNames = new Set<string>()
+function applyGlobalHighlightsAvoidingSpans(s: string): string {
+  // 将字符串分割成 span 标签内部和外部的部分
+  const parts: string[] = []
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  const spanRegex = /<span[^>]*>.*?<\/span>/g
 
-  const extractParams = (list: string) => {
-    if (!list || !list.trim()) return
-    list.replace(
-      /(?:^|[,({[]\s*)(?:(?:public|private|protected|readonly|override)\s+)*([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
-      (_m, name) => {
-        if (!RESERVED_PARAM_TOKENS.has(name)) {
-          paramNames.add(name)
-        }
-        return ''
-      },
-    )
+  while ((match = spanRegex.exec(s)) !== null) {
+    // 添加 span 标签之前的部分（应用高亮）
+    if (match.index > lastIndex) {
+      const beforeSpan = s.substring(lastIndex, match.index)
+      parts.push(applyGlobalHighlights(beforeSpan))
+    }
+    // 添加 span 标签本身（不应用高亮）
+    parts.push(match[0])
+    lastIndex = match.index + match[0].length
   }
 
-  htmlEscaped.replace(RE.funcParamsDecl, (_m, _open, inside) => {
-    extractParams(inside)
-    return ''
-  })
-  htmlEscaped.replace(RE.arrowParamsParen, (_m, inside) => {
-    extractParams(inside)
-    return ''
-  })
-  htmlEscaped.replace(RE.arrowParamSingle, (_m, name) => {
-    if (!RESERVED_PARAM_TOKENS.has(name)) {
-      paramNames.add(name)
-    }
-    return ''
-  })
+  // 添加最后剩余的部分（应用高亮）
+  if (lastIndex < s.length) {
+    const remaining = s.substring(lastIndex)
+    parts.push(applyGlobalHighlights(remaining))
+  }
 
+  return parts.join('')
+}
+
+function findMatchingBrace(code: string, start: number): number {
+  let count = 1
+  for (let j = start + 1; j < code.length; j++) {
+    if (code[j] === '{') count++
+    else if (code[j] === '}') {
+      count--
+      if (count === 0) return j
+    }
+  }
+  return code.length
+}
+
+function findExpressionEnd(code: string, start: number): number {
+  let count = 0
+  for (let j = start; j < code.length; j++) {
+    const c = code[j]
+    if (c === '(' || c === '[' || c === '{') count++
+    else if (c === ')' || c === ']' || c === '}') {
+      count--
+      if (count < 0) return j
+    } else if (count === 0 && (c === ';' || c === ',' || c === '\n')) {
+      return j
+    }
+  }
+  return code.length
+}
+
+function extractParams(list: string, paramNames: Set<string>): void {
+  if (!list || !list.trim()) return
+  list.replace(
+    /(?:^|[,({[]\s*)(?:(?:public|private|protected|readonly|override)\s+)*([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
+    (_m, name) => {
+      if (!RESERVED_PARAM_TOKENS.has(name)) paramNames.add(name)
+      return ''
+    },
+  )
+}
+
+function highlightPlain(plain: string, paramNames: Set<string>): string {
+  const output: string[] = []
+  let i = 0
+  while (i < plain.length) {
+    RE.funcParamsDecl.lastIndex = i
+    const mFunc = RE.funcParamsDecl.exec(plain)
+    RE.arrowParamsParen.lastIndex = i
+    const mArrowParen = RE.arrowParamsParen.exec(plain)
+    RE.arrowParamSingle.lastIndex = i
+    const mArrowSingle = RE.arrowParamSingle.exec(plain)
+    const matches = [mFunc, mArrowParen, mArrowSingle].filter(
+      (m): m is RegExpExecArray => m !== null,
+    )
+    if (!matches.length) {
+      let remaining = plain.slice(i)
+      remaining = applyGlobalHighlights(remaining)
+      for (const name of paramNames) {
+        remaining = remaining.replace(RE.paramUsage(name), COLOR.paramName(name))
+      }
+      output.push(remaining)
+      break
+    }
+    matches.sort((a, b) => a.index - b.index)
+    const m = matches[0]
+    const start = m.index
+    if (start > i) {
+      let before = plain.slice(i, start)
+      before = applyGlobalHighlights(before)
+      for (const name of paramNames) {
+        before = before.replace(RE.paramUsage(name), COLOR.paramName(name))
+      }
+      output.push(before)
+    }
+    let header: string
+    let bodyStart = m.index + m[0].length
+    const newParams = new Set(paramNames)
+    if (m === mFunc) {
+      const open = m[1]
+      const inside = m[2]
+      const close = m[3]
+      extractParams(inside, newParams)
+      header = open + highlightParamList(inside) + close
+    } else if (m === mArrowParen) {
+      const inside = m[1]
+      const after = m[2]
+      extractParams(inside, newParams)
+      header = `(${highlightParamList(inside)})${after}`
+    } else {
+      const name = m[1]
+      const arrow = m[2]
+      if (!RESERVED_PARAM_TOKENS.has(name)) newParams.add(name)
+      header = COLOR.paramName(name) + arrow
+    }
+    const wsRe = /\s*/g
+    wsRe.lastIndex = bodyStart
+    wsRe.exec(plain)
+    bodyStart = wsRe.lastIndex
+    let bodyEnd: number
+    let highlightedBody: string
+    if (bodyStart < plain.length && plain[bodyStart] === '{') {
+      const bracePos = bodyStart
+      bodyStart++
+      bodyEnd = findMatchingBrace(plain, bracePos)
+      const body = plain.slice(bodyStart, bodyEnd)
+      highlightedBody = highlightPlain(body, newParams)
+      output.push(applyGlobalHighlightsAvoidingSpans(header) + '{' + highlightedBody + '}')
+      i = bodyEnd + 1
+    } else {
+      bodyEnd = findExpressionEnd(plain, bodyStart)
+      const body = plain.slice(bodyStart, bodyEnd)
+      highlightedBody = highlightPlain(body, newParams)
+      output.push(applyGlobalHighlightsAvoidingSpans(header) + highlightedBody)
+      i = bodyEnd
+    }
+  }
+  return output.join('')
+}
+
+function highlightSimpleJs(htmlEscaped: string): string {
   const src = htmlEscaped
   const segs: string[] = []
   let last = 0
-  let m: RegExpExecArray | null
   const re = new RegExp(RE.token)
-  while ((m = re.exec(src)) !== null) {
+  while (true) {
+    const m = re.exec(src)
+    if (!m) break
     const idx = m.index
-    if (idx > last) {
-      let plain = src.slice(last, idx)
-      plain = applyPlainHighlight(plain)
-      for (const name of paramNames) {
-        plain = plain.replace(RE.paramUsage(name), COLOR.paramName(name))
-      }
-      segs.push(plain)
-    }
+    if (idx > last) segs.push(highlightPlain(src.slice(last, idx), new Set()))
     const token = m[0]
     if (token.startsWith('//') || token.startsWith('/*')) {
       segs.push(token.replace(RE.commentsOnly, COLOR.comment))
@@ -160,14 +247,7 @@ function highlightSimpleJs(htmlEscaped: string): string {
     }
     last = re.lastIndex
   }
-  if (last < src.length) {
-    let plain = src.slice(last)
-    plain = applyPlainHighlight(plain)
-    for (const name of paramNames) {
-      plain = plain.replace(RE.paramUsage(name), COLOR.paramName(name))
-    }
-    segs.push(plain)
-  }
+  if (last < src.length) segs.push(highlightPlain(src.slice(last), new Set()))
   return segs.join('')
 }
 
