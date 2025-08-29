@@ -6,12 +6,18 @@ function highlightSimpleJs(htmlEscaped: string): string {
   // Color values: #RRGGBB or #RGB format
   result = result.replace(
     /(#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}))\b/g,
-    (match, colorValue: string) =>
+    (_match, colorValue: string) =>
       `<span style="color: #000000 ; background-color: ${colorValue}; padding: 2px 4px; border-radius: 3px;">${colorValue}</span>`,
   )
 
   // Strings
-  result = result.replace(/(['"`])(?:\\.|(?!\1).)*?\1/g, '<span style="color: #9ECBFF;">$&</span>')
+  result = result.replace(
+    /("(?:[^"\\]|\\.)*")|('(?:[^'\\]|\\.)*')/g,
+    '<span style="color: #9ECBFF;">$&</span>',
+  )
+
+  // Comments
+  result = result.replace(/(\/\/.+)|(\/\*[\s\S]*?\*\/)/g, '<span style="color: #7DFCF4;">$&</span>')
 
   // Variable declarations: highlight variable names after const/let/var
   result = result.replace(
@@ -45,14 +51,14 @@ function highlightSimpleJs(htmlEscaped: string): string {
   // Function declarations/expressions: function name(params)
   result = result.replace(
     /\bfunction\b(\s*[a-zA-Z_$][a-zA-Z0-9_$]*\s*)?\(([^)]*)\)/g,
-    (match, nameGroup: string | undefined, params: string) => {
+    (_match, nameGroup: string | undefined, params: string) => {
       const highlightedParams = highlightParamList(params)
       return `function${nameGroup || ''}(${highlightedParams})`
     },
   )
 
   // Arrow functions with parentheses: (params) =>
-  result = result.replace(/\(([^)]*)\)\s*=>/g, (match, params: string) => {
+  result = result.replace(/\(([^)]*)\)\s*=>/g, (_match, params: string) => {
     const highlightedParams = highlightParamList(params)
     return `(${highlightedParams}) =>`
   })
@@ -60,12 +66,12 @@ function highlightSimpleJs(htmlEscaped: string): string {
   // Arrow functions single param: x =>
   result = result.replace(
     /\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=>/g,
-    (match, name: string) => `<span style=\"color: #FFD166;\">${name}</span> =>`,
+    (_match, name: string) => `<span style=\"color: #FFD166;\">${name}</span> =>`,
   )
 
   // Keywords
   result = result.replace(
-    /\b(import|from|function|export|const|return|let|var|async|await)\b/g,
+    /\b(import|from|function|export|const|return|let|var|async|await|type|as)\b/g,
     '<span style="color: #ff6b6b; font-weight: 600;">$1</span>',
   )
 

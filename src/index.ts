@@ -5,7 +5,6 @@ import { version } from './version'
 import VCard from './components/Card/index.vue'
 import VIcon from './components/Icon/index.vue'
 import VThemeToggle from './components/ThemeToggle/index.vue'
-
 // 样式导入
 import './styles/main.scss'
 
