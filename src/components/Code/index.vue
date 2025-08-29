@@ -11,6 +11,7 @@ defineOptions({ name: 'VCode', inheritAttrs: true })
 const props = withDefaults(defineProps<CodeProps>(), {
   lineNumbers: false,
   extra: true,
+  dots: true,
 })
 
 const extraConfig = computed(() => {
@@ -67,9 +68,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="VCode" :class="{ 'with-lines': props.lineNumbers }" v-bind="$attrs" ref="codeEl">
+  <div
+    class="VCode"
+    :class="{ 'with-lines': props.lineNumbers, dots: props.dots }"
+    v-bind="$attrs"
+    ref="codeEl"
+  >
     <div ref="slotEl" style="display: none"><slot /></div>
-    <div class="buttons"></div>
+    <div class="buttons" v-if="props.dots">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+    </div>
     <code v-html="html"></code>
     <div class="lang" v-if="extraConfig.showLang">{{ props.lang }}</div>
     <div class="tools" v-if="extraConfig.copy || extraConfig.download">

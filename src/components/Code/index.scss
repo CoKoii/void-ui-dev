@@ -1,6 +1,6 @@
 .VCode {
   background-color: #2a2d3d;
-  padding: 48px 24px 24px 24px;
+  padding: 24px;
   border-radius: 8px;
   color: #fff;
   font-family: monospace;
@@ -53,13 +53,24 @@
     position: absolute;
     top: 16px;
     left: 24px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #ed6a5e;
-    box-shadow:
-      20px 0 #f5bd4f,
-      40px 0 #61c454;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .red {
+      background-color: #ed6a5e;
+    }
+    .yellow {
+      background-color: #f5bd4f;
+    }
+    .green {
+      background-color: #61c454;
+    }
   }
 }
 
@@ -83,4 +94,7 @@
     padding-right: 0.6em;
     user-select: none;
   }
+}
+.dots {
+  padding: 48px 24px 24px 24px;
 }

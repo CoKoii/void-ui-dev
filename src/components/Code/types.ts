@@ -10,4 +10,5 @@ export interface CodeProps {
         showLang?: boolean
       }
     | boolean
+  dots?: boolean
 }
