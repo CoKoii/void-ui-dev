@@ -12,6 +12,9 @@ const COLOR = {
 
 const RE = {
   colorHex: /(#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}))\b/g,
+  // Strings, comments, or regex literals
+  token:
+    /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\/|\/(?![*\/])(?:\\.|\\[(?:\\.|[^\\\]])*\\]|[^\\\/\n\r])+\/[gimsuy]*/g,
   strOrComment: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\//g,
   stringsOnly: /("(?:[^"\\]|\\.)*")|('(?:[^'\\]|\\.)*')/g,
   commentsOnly: /(\/\/[^\n\r]*|\/\*[\s\S]*?\*\/)/g,
@@ -35,16 +38,21 @@ function highlightSimpleJs(htmlEscaped: string): string {
   const segs: string[] = []
   let last = 0
   let m: RegExpExecArray | null
-  const re = new RegExp(RE.strOrComment, 'g')
+  // Use a combined tokenizer that also captures regex literals
+  const re = new RegExp(RE.token)
   while ((m = re.exec(src)) !== null) {
     const idx = m.index
     if (idx > last) segs.push(applyPlainHighlight(src.slice(last, idx)))
     const token = m[0]
-    if (RE.commentsOnly.test(token)) {
+    // Classify without using global RegExp.test to avoid lastIndex side effects
+    if (token.startsWith('//') || token.startsWith('/*')) {
       segs.push(token.replace(RE.commentsOnly, COLOR.comment))
+    } else if (token.startsWith('"') || token.startsWith("'")) {
+      // Do not inject nested spans inside strings; just wrap them
+      segs.push(token.replace(RE.stringsOnly, COLOR.string))
     } else {
-      const colored = token.replace(RE.colorHex, (_m, hex: string) => COLOR.colorTokenBg(hex))
-      segs.push(colored.replace(RE.stringsOnly, COLOR.string))
+      // Regex literal — keep as-is
+      segs.push(token)
     }
     last = re.lastIndex
   }
