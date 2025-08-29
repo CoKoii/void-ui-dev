@@ -77,24 +77,20 @@ function applyGlobalHighlights(s: string): string {
 }
 
 function applyGlobalHighlightsAvoidingSpans(s: string): string {
-  // 将字符串分割成 span 标签内部和外部的部分
   const parts: string[] = []
   let lastIndex = 0
-  let match: RegExpExecArray | null
   const spanRegex = /<span[^>]*>.*?<\/span>/g
+  let match: RegExpExecArray | null
 
   while ((match = spanRegex.exec(s)) !== null) {
-    // 添加 span 标签之前的部分（应用高亮）
     if (match.index > lastIndex) {
       const beforeSpan = s.substring(lastIndex, match.index)
       parts.push(applyGlobalHighlights(beforeSpan))
     }
-    // 添加 span 标签本身（不应用高亮）
     parts.push(match[0])
     lastIndex = match.index + match[0].length
   }
 
-  // 添加最后剩余的部分（应用高亮）
   if (lastIndex < s.length) {
     const remaining = s.substring(lastIndex)
     parts.push(applyGlobalHighlights(remaining))
@@ -242,6 +238,8 @@ function highlightSimpleJs(htmlEscaped: string): string {
           return `<span style="color: #9ECBFF;">${withColor}</span>`
         }),
       )
+    } else if (token.match(/\/(?![*\/])[^\n\r]*\/[gimsuy]*/)) {
+      segs.push(token)
     } else {
       segs.push(token)
     }
