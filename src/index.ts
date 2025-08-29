@@ -3,14 +3,15 @@ import { version } from './version'
 
 // 组件导入
 import VCard from './components/Card/index.vue'
+import VCode from './components/Code/index.vue'
 import VIcon from './components/Icon/index.vue'
 import VThemeToggle from './components/ThemeToggle/index.vue'
-import VCode from './components/Code/index.vue'
+
 // 样式导入
 import './styles/main.scss'
 
 // 组件列表
-const components = [VCard, VIcon, VThemeToggle, VCode] as const
+const components = [VCard, VCode, VIcon, VThemeToggle] as const
 
 // 安装函数
 const install = (app: App): void => {
@@ -25,7 +26,7 @@ const install = (app: App): void => {
 const VoidDesignVue = { install, version }
 
 // 组件导出
-export { VCard, VIcon, VThemeToggle, VCode }
+export { VCard, VCode, VIcon, VThemeToggle }
 
 // 类型导出
 export * from './components'
