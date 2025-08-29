@@ -12,9 +12,8 @@ const COLOR = {
 
 const RE = {
   colorHex: /(#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}))\b/g,
-  // Strings, comments, or regex literals
   token:
-    /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\/|\/(?![*\/])(?:\\.|\\[(?:\\.|[^\\\]])*\\]|[^\\\/\n\r])+\/[gimsuy]*/g,
+    /"(?:[^"\\\]|\\.)*"|'(?:[^'\\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\/|\/(?![*\/])(?:\\.|\\[(?:\\.|[^\\\]])*\\]|[^\\/\n\r])+\/[gimsuy]*/g,
   strOrComment: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\//g,
   stringsOnly: /("(?:[^"\\]|\\.)*")|('(?:[^'\\]|\\.)*')/g,
   commentsOnly: /(\/\/[^\n\r]*|\/\*[\s\S]*?\*\/)/g,
@@ -48,8 +47,15 @@ function highlightSimpleJs(htmlEscaped: string): string {
     if (token.startsWith('//') || token.startsWith('/*')) {
       segs.push(token.replace(RE.commentsOnly, COLOR.comment))
     } else if (token.startsWith('"') || token.startsWith("'")) {
-      // Do not inject nested spans inside strings; just wrap them
-      segs.push(token.replace(RE.stringsOnly, COLOR.string))
+      segs.push(
+        token.replace(RE.stringsOnly, (_m, g1, g2) => {
+          const strContent = g1 || g2
+          const withColor = strContent.replace(RE.colorHex, (_m: string, hex: string) =>
+            COLOR.colorTokenBg(hex),
+          )
+          return `<span style="color: #9ECBFF;">${withColor}</span>`
+        }),
+      )
     } else {
       // Regex literal — keep as-is
       segs.push(token)
