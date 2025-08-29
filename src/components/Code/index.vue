@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { formatByLang } from './rules'
 import type { CodeProps } from './types'
 import VIcon from '../Icon/index.vue'
@@ -9,10 +9,21 @@ import html2canvas from 'html2canvas'
 defineOptions({ name: 'VCode', inheritAttrs: true })
 
 const props = withDefaults(defineProps<CodeProps>(), {
-  lang: 'js',
   lineNumbers: false,
-  download: true,
-  copy: true,
+  extra: true,
+})
+
+const extraConfig = computed(() => {
+  if (typeof props.extra === 'boolean') {
+    return props.extra
+      ? { copy: true, download: true, showLang: true }
+      : { copy: false, download: false, showLang: false }
+  }
+  return {
+    copy: props.extra?.copy ?? true,
+    download: props.extra?.download ?? true,
+    showLang: props.extra?.showLang ?? true,
+  }
 })
 
 const slotEl = ref<HTMLElement | null>(null)
@@ -39,7 +50,7 @@ async function downloadImage() {
   try {
     const canvas = await html2canvas(codeEl.value, {
       backgroundColor: 'transparent',
-      scale: 2,
+      scale: 3,
     })
     const link = document.createElement('a')
     link.download = `${props.lang}-code.png`
@@ -58,13 +69,14 @@ onMounted(() => {
 <template>
   <div class="VCode" :class="{ 'with-lines': props.lineNumbers }" v-bind="$attrs" ref="codeEl">
     <div ref="slotEl" style="display: none"><slot /></div>
+    <div class="buttons"></div>
     <code v-html="html"></code>
-    <div class="lang">{{ props.lang }}</div>
-    <div class="tools" v-if="props.download || props.copy">
-      <div class="copy" @click="copyCode" v-if="props.copy">
+    <div class="lang" v-if="extraConfig.showLang">{{ props.lang }}</div>
+    <div class="tools" v-if="extraConfig.copy || extraConfig.download">
+      <div class="copy" @click="copyCode" v-if="extraConfig.copy">
         <VIcon :icon="faCopy" />
       </div>
-      <div class="download" @click="downloadImage" v-if="props.download">
+      <div class="download" @click="downloadImage" v-if="extraConfig.download">
         <VIcon :icon="faDownload" />
       </div>
     </div>

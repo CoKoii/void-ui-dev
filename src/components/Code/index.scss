@@ -1,6 +1,6 @@
 .VCode {
   background-color: #2a2d3d;
-  padding: 24px;
+  padding: 48px 24px 24px 24px;
   border-radius: 8px;
   color: #fff;
   font-family: monospace;
@@ -49,6 +49,18 @@
       }
     }
   }
+  .buttons {
+    position: absolute;
+    top: 16px;
+    left: 24px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ed6a5e;
+    box-shadow:
+      20px 0 #f5bd4f,
+      40px 0 #61c454;
+  }
 }
 
 .VCode.with-lines {
@@ -56,7 +68,7 @@
 
   :deep(code > span) {
     position: relative;
-    padding-left: 4.5em;
+    padding-left: 3.5em;
   }
 
   :deep(code > span)::before {

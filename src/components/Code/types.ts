@@ -1,7 +1,13 @@
 export interface CodeProps {
-  lang?: string
+  lang: string
   /** 是否显示行号 */
   lineNumbers?: boolean
-  copy?: boolean
-  download?: boolean
+  /** 额外功能配置 */
+  extra?:
+    | {
+        copy?: boolean
+        download?: boolean
+        showLang?: boolean
+      }
+    | boolean
 }
