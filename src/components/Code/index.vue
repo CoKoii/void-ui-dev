@@ -21,9 +21,7 @@ onMounted(() => {
 
 <template>
   <div class="VCode">
-    <!-- hidden source -->
     <div ref="slotEl" style="display: none"><slot /></div>
-    <!-- rendered output -->
     <code v-html="html"></code>
   </div>
 </template>
