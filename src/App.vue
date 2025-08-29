@@ -5,7 +5,7 @@ defineOptions({
 import VThemeToggle from './components/ThemeToggle/index.vue'
 import VCode from './components/Code/index.vue'
 import { VCard, VIcon } from './components'
-import { faDownload, faMoon } from '@fortawesome/free-solid-svg-icons'
+import { faDownload } from '@fortawesome/free-solid-svg-icons'
 </script>
 
 <template>
@@ -16,12 +16,11 @@ import { faDownload, faMoon } from '@fortawesome/free-solid-svg-icons'
       :extra="{ copy: true, download: false, showLang: true }"
       :dots="false"
       lang="bash"
+      style="width: 600px"
     >
       {{ 'pnpm i antd' }}
     </VCode>
-    <div class="icon">
-      <VIcon :icon="faMoon" color="var(--v-blue-6)" size="3x" />
-    </div>
+
     <VCard title="Card Title">
       <template #extra>
         <VIcon :icon="faDownload" color="var(--v-blue-6)" />
@@ -46,10 +45,5 @@ import { faDownload, faMoon } from '@fortawesome/free-solid-svg-icons'
   position: fixed;
   right: 30px;
   top: 30px;
-}
-.icon {
-  padding: 160px;
-  border-radius: 50%;
-  background-color: red;
 }
 </style>

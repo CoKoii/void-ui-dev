@@ -29,7 +29,7 @@ export function wrapLines(content: string): string {
     .split('\n')
     .map(
       (line) =>
-        `<span style="display: block; min-height: 1.6em; line-height: 1.6em;">${line || '&nbsp;'}</span>`,
+        `<span style="display: block; min-height: 1.6em; line-height: 1.6em; font-size: 16px;">${line || '&nbsp;'}</span>`,
     )
     .join('')
 }

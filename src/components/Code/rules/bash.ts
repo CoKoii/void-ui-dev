@@ -6,7 +6,7 @@ const COLOR = {
   var: '<span style="color: #FFD866;">$&</span>',
   flag: '<span style="color: #B392F0;">$&</span>',
   cmd: (_pre: string, name: string) =>
-    `${_pre}<span style=\"color: #ff6b6b; font-weight: 600;\">${name}</span>`,
+    `${_pre}<span style=\"color: #ff6b6b; font-weight: 900;\">${name}</span>`,
   subshell: '<span style="color: #B392F0;">$&</span>',
   path: '<span style="color: #9ECBFF;">$&</span>',
 }
@@ -14,7 +14,6 @@ const COLOR = {
 const RE = {
   token: /"(?:[^"\\]|\\.)*"|'[^']*'|`[^`]*`|(^|[\s;])#[^\n\r]*/g,
   stringsOnly: /(\"(?:[^\"\\]|\\.)*\")|('[^']*')|(`[^`]*`)/g,
-  // Variables: $FOO, ${FOO}, $1
   variable: /\$\{[^}]+\}|\$[a-zA-Z_][a-zA-Z0-9_]*|\$[0-9]+/g,
   flag: /(?<=^|\s)(?:--[a-zA-Z0-9][a-zA-Z0-9-]*\b(?:=[^\s]+)?|-{1}[a-zA-Z]+\b)(?=\s|$)/g,
   // Subshells: $(...), $((...))
