@@ -4,22 +4,24 @@ const COLOR = {
   colorTokenBg: (hex: string) =>
     `<span style="color: #000000; background-color: ${hex}; padding: 2px 4px; border-radius: 3px;">${hex}</span>`,
   string: '<span style="color: #9ECBFF;">$&</span>',
-  comment: '<span style="color: #7DFCF4;">$&</span>',
+  comment: '<span style="color: #7DFCF4; font-weight: bold; letter-spacing: 1px;">$&</span>',
   varName: (kw: string, name: string) => `${kw} <span style="color: #9ECBFF;">${name}</span>`,
   keyword: '<span style="color: #ff6b6b; font-weight: 600;">$1</span>',
   funcName: '<span style="color: #B392F0;">$1</span>(',
   paramName: (name: string) => `<span style="color: #FFD866;">${name}</span>`,
+  regex: '<span style="color: #F97583;">$&</span>',
 }
 
 const RE = {
   colorHex: /(#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}))\b/g,
   token:
-    /"(?:[^"\\\]|\\.)*"|'(?:[^'\\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\/|\/(?![*\/])(?:\\.|\\[(?:\\.|[^\\\]])*\\]|[^\\/\n\r])+\/[gimsuy]*/g,
+    /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\/|\/(?![*\/])(?:[^\/\n\r]|\\.)*\/[gimsuy]*/g,
   strOrComment: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\//g,
   stringsOnly: /("(?:[^"\\]|\\.)*")|('(?:[^'\\]|\\.)*')/g,
   commentsOnly: /(\/\/[^\n\r]*|\/\*[\s\S]*?\*\/)/g,
   varDecl: /\b(const|let|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
-  keywords: /\b(import|from|function|export|const|return|let|var|async|await|type|as|default)\b/g,
+  keywords:
+    /\b(import|from|function|export|const|return|let|var|async|await|type|as|default|for|of|if|while|switch|catch|with|typeof|delete|new|in|else|try|finally|break|continue|class|extends|implements|interface|throw|instanceof)\b/g,
   funcNameCall:
     /\b(?!(?:if|for|while|switch|catch|with|return|typeof|delete|new)\b)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g,
   funcParamsDecl: /\b(function\s*\*?\s*(?:[a-zA-Z_$][a-zA-Z0-9_$]*)?\s*\()([^)]*)(\))/g,
@@ -227,7 +229,7 @@ function highlightSimpleJs(htmlEscaped: string): string {
     if (idx > last) segs.push(highlightPlain(src.slice(last, idx), new Set()))
     const token = m[0]
     if (token.startsWith('//') || token.startsWith('/*')) {
-      segs.push(token.replace(RE.commentsOnly, COLOR.comment))
+      segs.push(COLOR.comment.replace('$&', token))
     } else if (token.startsWith('"') || token.startsWith("'")) {
       segs.push(
         token.replace(RE.stringsOnly, (_m, g1, g2) => {
@@ -238,8 +240,13 @@ function highlightSimpleJs(htmlEscaped: string): string {
           return `<span style="color: #9ECBFF;">${withColor}</span>`
         }),
       )
-    } else if (token.match(/\/(?![*\/])[^\n\r]*\/[gimsuy]*/)) {
-      segs.push(token)
+    } else if (
+      token.startsWith('/') &&
+      !token.startsWith('//') &&
+      !token.startsWith('/*') &&
+      token.match(/^\/(?![*\/])(?:[^\/\n\r]|\\.)*\/[gimsuy]*$/)
+    ) {
+      segs.push(COLOR.regex.replace('$&', token))
     } else {
       segs.push(token)
     }
