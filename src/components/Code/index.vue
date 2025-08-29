@@ -11,6 +11,8 @@ defineOptions({ name: 'VCode', inheritAttrs: true })
 const props = withDefaults(defineProps<CodeProps>(), {
   lang: 'js',
   lineNumbers: false,
+  download: true,
+  copy: true,
 })
 
 const slotEl = ref<HTMLElement | null>(null)
@@ -26,7 +28,7 @@ async function copyCode() {
   try {
     const raw = slotEl.value?.textContent ?? ''
     await navigator.clipboard.writeText(raw)
-    alert('复制成功！')
+    console.log('复制成功！')
   } catch (err) {
     console.error('复制失败', err)
   }
@@ -58,11 +60,11 @@ onMounted(() => {
     <div ref="slotEl" style="display: none"><slot /></div>
     <code v-html="html"></code>
     <div class="lang">{{ props.lang }}</div>
-    <div class="tools">
-      <div class="copy" @click="copyCode">
+    <div class="tools" v-if="props.download || props.copy">
+      <div class="copy" @click="copyCode" v-if="props.copy">
         <VIcon :icon="faCopy" />
       </div>
-      <div class="download" @click="downloadImage">
+      <div class="download" @click="downloadImage" v-if="props.download">
         <VIcon :icon="faDownload" />
       </div>
     </div>
