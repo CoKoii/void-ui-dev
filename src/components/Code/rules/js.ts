@@ -1,8 +1,11 @@
 import { escapeHtml, wrapLines } from './index'
 
 const COLOR = {
-  colorTokenBg: (hex: string) =>
-    `<span style="color: #000000; background-color: ${hex}; padding: 2px 4px; border-radius: 3px;">${hex}</span>`,
+  colorTokenBg: (hex: string) => {
+    const textColor =
+      hex.toLowerCase() === '#000000' || hex.toLowerCase() === '#000' ? '#ffffff' : '#000000'
+    return `<span style="color: ${textColor}; background-color: ${hex}; padding: 2px 4px; border-radius: 3px;">${hex}</span>`
+  },
   string: '<span style="color: #9ECBFF;">$&</span>',
   comment: '<span style="color: #7DFCF4; font-weight: bold; letter-spacing: 1px;">$&</span>',
   varName: (kw: string, name: string) => `${kw} <span style="color: #9ECBFF;">${name}</span>`,
@@ -15,7 +18,7 @@ const COLOR = {
 const RE = {
   colorHex: /(#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}))\b/g,
   token:
-    /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\/|\/(?![*\/])(?:[^\/\n\r]|\\.)*\/[gimsuy]*/g,
+    /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*(?![gimsuxy])|\/\*[\s\S]*?\*\/|\/(?![*\/])(?:[^\/\n\r]|\\.)*\/[gimsuy]*/g,
   strOrComment: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\/[^\n\r]*|\/\*[\s\S]*?\*\//g,
   stringsOnly: /("(?:[^"\\]|\\.)*")|('(?:[^'\\]|\\.)*')/g,
   commentsOnly: /(\/\/[^\n\r]*|\/\*[\s\S]*?\*\/)/g,
@@ -28,6 +31,7 @@ const RE = {
   arrowParamsParen: /\(([^)]*)\)(\s*=>)/g,
   arrowParamSingle: /\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(=>)/g,
   paramUsage: (name: string) => new RegExp(`\\b(?<!\\.|:)\\s*${name}\\b(?!\\s*[:=])`, 'g'),
+  regexPattern: /\/(?![*\/])(?:[^\/\n\r\\]|\\.)+\/[gimsuy]*/g,
 }
 
 const RESERVED_PARAM_TOKENS = new Set(['true', 'false', 'null', 'undefined', 'this', 'super'])
@@ -222,13 +226,16 @@ function highlightSimpleJs(htmlEscaped: string): string {
   const segs: string[] = []
   let last = 0
   const re = new RegExp(RE.token)
+
   while (true) {
     const m = re.exec(src)
     if (!m) break
     const idx = m.index
     if (idx > last) segs.push(highlightPlain(src.slice(last, idx), new Set()))
+
     const token = m[0]
-    if (token.startsWith('//') || token.startsWith('/*')) {
+
+    if ((token.startsWith('//') && !token.match(/\/\/[gimsuxy]*$/)) || token.startsWith('/*')) {
       segs.push(COLOR.comment.replace('$&', token))
     } else if (token.startsWith('"') || token.startsWith("'")) {
       segs.push(
@@ -244,7 +251,7 @@ function highlightSimpleJs(htmlEscaped: string): string {
       token.startsWith('/') &&
       !token.startsWith('//') &&
       !token.startsWith('/*') &&
-      token.match(/^\/(?![*\/])(?:[^\/\n\r]|\\.)*\/[gimsuy]*$/)
+      token.match(/^\/(?![*\/])(?:[^\/\n\r\\]|\\.)*\/[gimsuy]*$/)
     ) {
       segs.push(COLOR.regex.replace('$&', token))
     } else {
@@ -252,6 +259,7 @@ function highlightSimpleJs(htmlEscaped: string): string {
     }
     last = re.lastIndex
   }
+
   if (last < src.length) segs.push(highlightPlain(src.slice(last), new Set()))
   return segs.join('')
 }
