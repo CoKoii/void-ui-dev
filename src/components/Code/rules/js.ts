@@ -25,6 +25,7 @@ const RE = {
   funcParamsDecl: /\b(function\s*\*?\s*(?:[a-zA-Z_$][a-zA-Z0-9_$]*)?\s*\()([^)]*)(\))/g,
   arrowParamsParen: /\(([^)]*)\)(\s*=>)/g,
   arrowParamSingle: /\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(=>)/g,
+  paramUsage: (name: string) => new RegExp(`\\b(?<!\\.|:)\\s*${name}\\b(?!\\s*[:=])`, 'g'),
 }
 
 const RESERVED_PARAM_TOKENS = new Set(['true', 'false', 'null', 'undefined', 'this', 'super'])
@@ -96,6 +97,36 @@ function applyPlainHighlight(s: string): string {
 }
 
 function highlightSimpleJs(htmlEscaped: string): string {
+  const paramNames = new Set<string>()
+
+  const extractParams = (list: string) => {
+    if (!list || !list.trim()) return
+    list.replace(
+      /(?:^|[,({[]\s*)(?:(?:public|private|protected|readonly|override)\s+)*([a-zA-Z_$][a-zA-Z0-9_$]*)/g,
+      (_m, name) => {
+        if (!RESERVED_PARAM_TOKENS.has(name)) {
+          paramNames.add(name)
+        }
+        return ''
+      },
+    )
+  }
+
+  htmlEscaped.replace(RE.funcParamsDecl, (_m, _open, inside) => {
+    extractParams(inside)
+    return ''
+  })
+  htmlEscaped.replace(RE.arrowParamsParen, (_m, inside) => {
+    extractParams(inside)
+    return ''
+  })
+  htmlEscaped.replace(RE.arrowParamSingle, (_m, name) => {
+    if (!RESERVED_PARAM_TOKENS.has(name)) {
+      paramNames.add(name)
+    }
+    return ''
+  })
+
   const src = htmlEscaped
   const segs: string[] = []
   let last = 0
@@ -103,7 +134,14 @@ function highlightSimpleJs(htmlEscaped: string): string {
   const re = new RegExp(RE.token)
   while ((m = re.exec(src)) !== null) {
     const idx = m.index
-    if (idx > last) segs.push(applyPlainHighlight(src.slice(last, idx)))
+    if (idx > last) {
+      let plain = src.slice(last, idx)
+      plain = applyPlainHighlight(plain)
+      for (const name of paramNames) {
+        plain = plain.replace(RE.paramUsage(name), COLOR.paramName(name))
+      }
+      segs.push(plain)
+    }
     const token = m[0]
     if (token.startsWith('//') || token.startsWith('/*')) {
       segs.push(token.replace(RE.commentsOnly, COLOR.comment))
@@ -122,7 +160,14 @@ function highlightSimpleJs(htmlEscaped: string): string {
     }
     last = re.lastIndex
   }
-  if (last < src.length) segs.push(applyPlainHighlight(src.slice(last)))
+  if (last < src.length) {
+    let plain = src.slice(last)
+    plain = applyPlainHighlight(plain)
+    for (const name of paramNames) {
+      plain = plain.replace(RE.paramUsage(name), COLOR.paramName(name))
+    }
+    segs.push(plain)
+  }
   return segs.join('')
 }
 

@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { formatByLang } from './rules'
 
-defineOptions({ name: 'VCode' })
+defineOptions({ name: 'VCode', inheritAttrs: true })
 
 const props = withDefaults(defineProps<{ lang?: string }>(), { lang: 'js' })
 
@@ -20,7 +20,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="VCode">
+  <div class="VCode" v-bind="$attrs">
     <div ref="slotEl" style="display: none"><slot /></div>
     <code v-html="html"></code>
   </div>
