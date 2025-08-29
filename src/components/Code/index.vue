@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { formatByLang } from './rules'
+import type { CodeProps } from './types'
 
 defineOptions({ name: 'VCode', inheritAttrs: true })
 
-const props = withDefaults(defineProps<{ lang?: string }>(), { lang: 'js' })
+const props = withDefaults(defineProps<CodeProps>(), {
+  lang: 'js',
+  lineNumbers: false,
+})
 
 const slotEl = ref<HTMLElement | null>(null)
 const html = ref('')
@@ -20,7 +24,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="VCode" v-bind="$attrs">
+  <div class="VCode" :class="{ 'with-lines': props.lineNumbers }" v-bind="$attrs">
     <div ref="slotEl" style="display: none"><slot /></div>
     <code v-html="html"></code>
   </div>

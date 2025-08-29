@@ -11,3 +11,25 @@
     white-space: pre;
   }
 }
+
+.VCode.with-lines {
+  counter-reset: v-code-line;
+
+  :deep(code > span) {
+    position: relative;
+    padding-left: 4.5em;
+  }
+
+  :deep(code > span)::before {
+    counter-increment: v-code-line;
+    content: counter(v-code-line);
+    position: absolute;
+    left: 0;
+    width: 2.5em;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.55);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    padding-right: 0.6em;
+    user-select: none;
+  }
+}
