@@ -11,10 +11,13 @@ import { faDownload, faMoon } from '@fortawesome/free-solid-svg-icons'
 <template>
   <div class="App">
     <VThemeToggle class="changeTheme" />
-    <VCode :line-numbers="true" :extra="{ copy: true, download: true, showLang: true }" lang="js">
-      {{
-        "import type { App } from \'vue\'\nimport { version } from \'./version\'\n\n// 组件导入\nimport VCard from \'./components/Card/index.vue\'\nimport VIcon from \'./components/Icon/index.vue\'\nimport VThemeToggle from \'./components/ThemeToggle/index.vue\'\nimport VCode from \'./components/Code/index.vue\'\n// 样式导入\nimport \'./styles/main.scss\'\n\n// 组件列表\nconst components = [VCard, VIcon, VThemeToggle, VCode] as const\n\n// 安装函数\nconst install = (app: App): void => {\n  components.forEach((component) => {\n    if (component.name) {\n      app.component(component.name, component)\n    }\n  })\n}\n\n// 默认导出\nconst VoidDesignVue = { install, version }\n\n// 组件导出\nexport { VCard, VIcon, VThemeToggle, VCode }\n\n// 类型导出\nexport * from \'./components\'\n\n// 插件导出\nexport { install, version }\nexport default VoidDesignVue\n"
-      }}
+    <VCode
+      :line-numbers="false"
+      :extra="{ copy: true, download: false, showLang: true }"
+      :dots="false"
+      lang="bash"
+    >
+      {{ 'pnpm i antd' }}
     </VCode>
     <div class="icon">
       <VIcon :icon="faMoon" color="var(--v-blue-6)" size="3x" />

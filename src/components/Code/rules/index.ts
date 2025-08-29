@@ -1,9 +1,17 @@
 export type CodeHandler = (code: string) => string
 
 import { transformJs } from './js'
+import { transformBash } from './bash'
 
 const handlers: Record<string, CodeHandler> = {
   js: transformJs,
+  ts: transformJs,
+  javascript: transformJs,
+  typescript: transformJs,
+  bash: transformBash,
+  sh: transformBash,
+  zsh: transformBash,
+  shell: transformBash,
 }
 
 export function formatByLang(lang: string, code: string): string {
