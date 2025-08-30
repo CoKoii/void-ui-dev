@@ -11,4 +11,6 @@ export interface CodeProps {
       }
     | boolean
   dots?: boolean
+  /** 文件路径 */
+  path?: string
 }

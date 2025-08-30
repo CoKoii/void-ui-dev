@@ -79,8 +79,11 @@ onMounted(() => {
       <span class="dot red"></span>
       <span class="dot yellow"></span>
       <span class="dot green"></span>
+      <span class="path" v-if="props.path">{{ props.path }}</span>
     </div>
-    <code v-html="html"></code>
+    <div class="code-wrapper">
+      <code v-html="html"></code>
+    </div>
     <div class="lang" v-if="extraConfig.showLang">{{ props.lang }}</div>
     <div class="tools" v-if="extraConfig.copy || extraConfig.download">
       <div class="copy" @click="copyCode" v-if="extraConfig.copy">

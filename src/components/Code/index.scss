@@ -4,13 +4,24 @@
   border-radius: 8px;
   color: #fff;
   font-family: monospace;
-  overflow: auto;
   position: relative;
+
+  .code-wrapper {
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   code {
     display: flex;
     flex-direction: column;
     white-space: pre;
   }
+
   .lang {
     color: rgba(255, 255, 255, 0.55);
     position: absolute;
@@ -19,6 +30,7 @@
     font-size: 12px;
     user-select: none;
   }
+
   .tools {
     position: absolute;
     top: 12px;
@@ -49,6 +61,7 @@
       }
     }
   }
+
   .buttons {
     position: absolute;
     top: 16px;
@@ -70,6 +83,13 @@
     }
     .green {
       background-color: #61c454;
+    }
+
+    .path {
+      margin-left: 12px;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 13px;
+      font-family: monospace;
     }
   }
 }
@@ -95,6 +115,7 @@
     user-select: none;
   }
 }
+
 .dots {
   padding: 48px 24px 24px 24px;
 }
