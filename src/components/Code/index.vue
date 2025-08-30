@@ -70,15 +70,17 @@ onMounted(() => {
 <template>
   <div
     class="VCode"
-    :class="{ 'with-lines': props.lineNumbers, dots: props.dots }"
+    :class="{ 'with-lines': props.lineNumbers, beauty: props.dots || props.path }"
     v-bind="$attrs"
     ref="codeEl"
   >
     <div ref="slotEl" style="display: none"><slot /></div>
-    <div class="buttons" v-if="props.dots">
-      <span class="dot red"></span>
-      <span class="dot yellow"></span>
-      <span class="dot green"></span>
+    <div class="buttons" v-if="props.dots || props.path">
+      <div class="dots" v-if="props.dots">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
       <span class="path" v-if="props.path">{{ props.path }}</span>
     </div>
     <div class="code-wrapper">

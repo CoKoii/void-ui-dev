@@ -15,6 +15,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons'
       :line-numbers="true"
       :extra="{ copy: true, download: false, showLang: true }"
       lang="js"
+      :dots="true"
       style="width: 600px"
       path="main.ts"
     >
