@@ -3,8 +3,9 @@
   padding: var(--v-padding-24);
   border-radius: var(--v-border-radius-8);
   color: rgba(255, 255, 255);
-  font-family: monospace;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   position: relative;
+
   .code-wrapper {
     overflow: auto;
     scrollbar-width: none;
@@ -18,7 +19,58 @@
     display: flex;
     flex-direction: column;
     white-space: pre;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
   }
+
+  :deep(.hljs-keyword),
+  :deep(.hljs-selector-tag),
+  :deep(.hljs-built_in),
+  :deep(.hljs-name),
+  :deep(.hljs-tag) {
+    color: #ff6b6b !important;
+    font-weight: 600 !important;
+  }
+
+  :deep(.hljs-string),
+  :deep(.hljs-title),
+  :deep(.hljs-section),
+  :deep(.hljs-attribute),
+  :deep(.hljs-literal),
+  :deep(.hljs-template-tag),
+  :deep(.hljs-template-variable),
+  :deep(.hljs-type),
+  :deep(.hljs-addition) {
+    color: #9ecbff !important;
+  }
+
+  :deep(.hljs-comment),
+  :deep(.hljs-quote),
+  :deep(.hljs-deletion),
+  :deep(.hljs-meta) {
+    color: #7dfcf4 !important;
+    font-weight: bold !important;
+    letter-spacing: 1px !important;
+  }
+
+  :deep(.hljs-function),
+  :deep(.hljs-class),
+  :deep(.hljs-title.class_),
+  :deep(.hljs-title.function_) {
+    color: #b392f0 !important;
+  }
+
+  :deep(.hljs-variable),
+  :deep(.hljs-params) {
+    color: #ffd866 !important;
+  }
+
+  :deep(.hljs-regexp),
+  :deep(.hljs-link) {
+    color: #f97583 !important;
+  }
+
   .lang {
     color: rgba(255, 255, 255, 0.55);
     position: absolute;

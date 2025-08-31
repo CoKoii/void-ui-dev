@@ -5,6 +5,7 @@ import type { CodeProps } from './types'
 import VIcon from '../Icon/index.vue'
 import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons'
 import html2canvas from 'html2canvas'
+import 'highlight.js/styles/github-dark.css'
 
 defineOptions({ name: 'VCode', inheritAttrs: true })
 

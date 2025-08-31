@@ -4,8 +4,42 @@ defineOptions({
 })
 import VThemeToggle from './components/ThemeToggle/index.vue'
 import VCode from './components/Code/index.vue'
-import { VCard, VIcon } from './components'
-import { faDownload } from '@fortawesome/free-solid-svg-icons'
+const vueTemplateCode = `<template>
+  <div class="user-card">
+    <div class="user-avatar">
+      <img :src="user.avatar" :alt="user.name" />
+    </div>
+    <div class="user-info">
+      <h3 class="user-name">{{ user.name }}</h3>
+      <p class="user-email">{{ user.email }}</p>
+      <div class="user-badges">
+        <span
+          v-for="badge in user.badges"
+          :key="badge.id"
+          class="badge"
+          :class="\`badge-\${badge.type}\`"
+        >
+          {{ badge.label }}
+        </span>
+      </div>
+    </div>
+    <div class="user-actions">
+      <button
+        @click="handleFollow"
+        :disabled="isLoading"
+        class="btn btn-primary"
+      >
+        {{ isFollowing ? '取消关注' : '关注' }}
+      </button>
+      <button
+        @click="handleMessage"
+        class="btn btn-secondary"
+      >
+        发消息
+      </button>
+    </div>
+  </div>
+</template>`
 </script>
 
 <template>
@@ -14,22 +48,12 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons'
     <VCode
       :line-numbers="true"
       :extra="{ copy: true, download: false, showLang: true }"
-      lang="js"
+      lang="template"
       :dots="true"
-      style="width: 600px"
-      path="main.ts"
+      style="width: 600px; margin-bottom: 20px"
+      path="UserCard.vue"
+      >{{ vueTemplateCode }}</VCode
     >
-      {{
-        "import type { App } from 'vue'\nimport { version } from './version'\n\n// 组件导入\nimport VCard from './components/Card/index.vue'\nimport VCode from './components/Code/index.vue'\nimport VIcon from './components/Icon/index.vue'\nimport VThemeToggle from './components/ThemeToggle/index.vue'\n\n// 样式导入\nimport './styles/main.scss'\n\n// 组件列表\nconst components = [VCard, VCode, VIcon, VThemeToggle] as const\n\n// 安装函数\nconst install = (app: App): void => {\n  components.forEach((component) => {\n    if (component.name) {\n      app.component(component.name, component)\n    }\n  })\n}\n\n// 默认导出\nconst VoidDesignVue = { install, version }\n\n// 组件导出\nexport { VCard, VCode, VIcon, VThemeToggle }\n\n// 类型导出\nexport * from './components'\n\n// 插件导出\nexport { install, version }\nexport default VoidDesignVue"
-      }}
-    </VCode>
-
-    <VCard title="Card Title">
-      <template #extra>
-        <VIcon :icon="faDownload" color="var(--v-blue-6)" />
-      </template>
-      labore, ipsum architecto dignissimos debitis accusantium eveniet.
-    </VCard>
   </div>
 </template>
 
