@@ -44,10 +44,30 @@ export function formatByLang(lang: string, code: string): string {
 
   try {
     if (actualLang && hljs.getLanguage(actualLang)) {
-      return hljs.highlight(trimmed, { language: actualLang }).value
+      const result = hljs.highlight(trimmed, { language: actualLang })
+      return result.value
     }
-    return hljs.highlightAuto(trimmed).value
-  } catch {
+
+    if (lang.toLowerCase() === 'css' && hljs.getLanguage('css')) {
+      const result = hljs.highlight(trimmed, { language: 'css' })
+      return result.value
+    }
+    if (
+      (lang.toLowerCase() === 'scss' || lang.toLowerCase() === 'sass') &&
+      hljs.getLanguage('scss')
+    ) {
+      const result = hljs.highlight(trimmed, { language: 'scss' })
+      return result.value
+    }
+    if (lang.toLowerCase() === 'less' && hljs.getLanguage('less')) {
+      const result = hljs.highlight(trimmed, { language: 'less' })
+      return result.value
+    }
+
+    const autoResult = hljs.highlightAuto(trimmed)
+    return autoResult.value
+  } catch (error) {
+    console.warn('Highlight.js error:', error, 'for language:', actualLang || lang)
     return escapeHtml(trimmed)
   }
 }

@@ -79,6 +79,29 @@
     color: #ffd866 !important;
   }
 
+  :deep(.hljs-selector-id),
+  :deep(.hljs-selector-class) {
+    color: #85e89d !important;
+    font-weight: 600 !important;
+  }
+
+  :deep(.hljs-selector-pseudo) {
+    color: #f97583 !important;
+  }
+
+  :deep(.hljs-property) {
+    color: #9ecbff !important;
+  }
+
+  :deep(.hljs-number),
+  :deep(.hljs-literal) {
+    color: #79b8ff !important;
+  }
+
+  :deep(.hljs-tag) {
+    color: #85e89d !important;
+  }
+
   :deep(.hljs-regexp),
   :deep(.hljs-link) {
     color: #f97583 !important;
