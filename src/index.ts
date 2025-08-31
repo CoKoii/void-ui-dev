@@ -4,6 +4,7 @@ import { version } from './version'
 // 组件导入
 import VCard from './components/Card/index.vue'
 import VCode from './components/Code/index.vue'
+import VCodePreview from './components/CodePreview/index.vue'
 import VIcon from './components/Icon/index.vue'
 import VThemeToggle from './components/ThemeToggle/index.vue'
 
@@ -11,7 +12,7 @@ import VThemeToggle from './components/ThemeToggle/index.vue'
 import './styles/main.scss'
 
 // 组件列表
-const components = [VCard, VCode, VIcon, VThemeToggle] as const
+const components = [VCard, VCode, VCodePreview, VIcon, VThemeToggle] as const
 
 // 安装函数
 const install = (app: App): void => {
@@ -26,7 +27,7 @@ const install = (app: App): void => {
 const VoidDesignVue = { install, version }
 
 // 组件导出
-export { VCard, VCode, VIcon, VThemeToggle }
+export { VCard, VCode, VCodePreview, VIcon, VThemeToggle }
 
 // 类型导出
 export * from './components'
