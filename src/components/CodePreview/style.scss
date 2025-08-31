@@ -1,7 +1,8 @@
 .VCodePreview {
-  width: 80%;
+  width: 800px;
   display: flex;
   flex-direction: column;
+
   .demo {
     width: 100%;
     display: flex;
@@ -10,14 +11,44 @@
     border-radius: var(--v-border-radius-8);
     padding: var(--v-padding-24);
   }
+
   .tools {
     display: flex;
     flex-direction: row-reverse;
     margin: 12px 0;
+
     .spread {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      padding: 4px;
+      border-radius: var(--v-border-radius-8);
+      cursor: pointer;
+      background-color: var(--v-item-bg-color);
+      opacity: 0.5;
+      transition: all 0.15s ease;
+      user-select: none;
+      font-size: 14px;
+
+      &:hover {
+        opacity: 0.9;
+      }
     }
   }
+}
+
+.fade-enter-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-leave-to {
+  opacity: 0;
 }

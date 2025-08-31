@@ -9,7 +9,7 @@ import 'highlight.js/styles/github-dark.css'
 defineOptions({ name: 'VCode', inheritAttrs: true })
 
 const props = withDefaults(defineProps<CodeProps>(), {
-  lineNumbers: false,
+  lineNumbers: true,
   extra: true,
   dots: true,
 })
