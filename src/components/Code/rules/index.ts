@@ -1,6 +1,6 @@
 import hljs from 'highlight.js'
 
-const languageMap: Record<string, string> = {
+const languageMap: Readonly<Record<string, string>> = Object.freeze({
   js: 'javascript',
   ts: 'typescript',
   tsx: 'typescript',
@@ -22,25 +22,27 @@ const languageMap: Record<string, string> = {
   html: 'xml',
   htm: 'xml',
   template: 'xml',
+})
+
+function resolveLanguage(lang: string | undefined): string | undefined {
+  const key = lang?.toLowerCase()
+  if (!key) return undefined
+  return languageMap[key] || key
 }
 
 export function formatByLang(lang: string, code: string): string {
-  // 统一换行符，避免 CRLF 干扰
   const normalized = code.replace(/\r\n?/g, '\n')
   const trimmed = normalized.trim()
   if (!trimmed) return '&nbsp;'
 
-  // 获取实际的语言名称
-  const actualLang = languageMap[lang?.toLowerCase()] || lang?.toLowerCase()
+  const actualLang = resolveLanguage(lang)
 
   try {
     if (actualLang && hljs.getLanguage(actualLang)) {
-      // 整段高亮，保持跨行语法高亮的上下文
       return hljs.highlight(trimmed, { language: actualLang }).value
     }
     return hljs.highlightAuto(trimmed).value
-  } catch (error) {
-    console.warn('Code highlighting failed:', error)
+  } catch {
     return escapeHtml(trimmed)
   }
 }
@@ -48,4 +50,3 @@ export function formatByLang(lang: string, code: string): string {
 export function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
-// 行包裹在组件层（index.vue）完成，以避免破坏高亮结构

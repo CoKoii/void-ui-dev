@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { formatByLang } from './rules'
 import type { CodeProps } from './types'
 import VIcon from '../Icon/index.vue'
@@ -14,6 +14,11 @@ const props = withDefaults(defineProps<CodeProps>(), {
   extra: true,
   dots: true,
 })
+
+const emit = defineEmits<{
+  (e: 'copy', success: boolean): void
+  (e: 'download', success: boolean): void
+}>()
 
 const extraConfig = computed(() => {
   if (typeof props.extra === 'boolean') {
@@ -32,6 +37,8 @@ const slotEl = ref<HTMLElement | null>(null)
 const html = ref('')
 const codeEl = ref<HTMLElement | null>(null)
 
+const getRawCode = () => slotEl.value?.textContent ?? ''
+
 function wrapHighlightedHtmlToLines(highlighted: string): string {
   const container = document.createElement('div')
   container.innerHTML = highlighted
@@ -48,7 +55,6 @@ function wrapHighlightedHtmlToLines(highlighted: string): string {
   function startNewLine() {
     currentLine = document.createElement('span')
     lines.push(currentLine)
-    // 依据当前原始路径重建克隆路径
     cloneStack = []
     let parent: Element | HTMLElement = currentLine
     for (const orig of origStack) {
@@ -66,7 +72,6 @@ function wrapHighlightedHtmlToLines(highlighted: string): string {
       for (let i = 0; i < parts.length; i++) {
         if (parts[i]) getTarget().appendChild(document.createTextNode(parts[i]))
         if (i < parts.length - 1) {
-          // 遇到换行，开启新行并保持当前打开的标签链
           startNewLine()
         }
       }
@@ -79,10 +84,8 @@ function wrapHighlightedHtmlToLines(highlighted: string): string {
       getTarget().appendChild(clone)
       origStack.push(el)
       cloneStack.push(clone)
-      // 递归其子节点
       const children = Array.from(el.childNodes)
       for (const child of children) walk(child)
-      // 退出该元素
       origStack.pop()
       cloneStack.pop()
       return
@@ -97,18 +100,18 @@ function wrapHighlightedHtmlToLines(highlighted: string): string {
 }
 
 function runPipeline() {
-  const raw = slotEl.value?.textContent ?? ''
+  const raw = getRawCode()
   const highlighted = formatByLang(props.lang, raw)
   html.value = props.lineNumbers ? wrapHighlightedHtmlToLines(highlighted) : highlighted
 }
 
 async function copyCode() {
   try {
-    const raw = slotEl.value?.textContent ?? ''
+    const raw = getRawCode()
     await navigator.clipboard.writeText(raw)
-    console.log('复制成功！')
-  } catch (err) {
-    console.error('复制失败', err)
+    emit('copy', true)
+  } catch {
+    emit('copy', false)
   }
 }
 
@@ -123,14 +126,17 @@ async function downloadImage() {
     link.download = `${props.lang}-code.png`
     link.href = canvas.toDataURL('image/png')
     link.click()
-  } catch (err) {
-    console.error('下载失败', err)
+    emit('download', true)
+  } catch {
+    emit('download', false)
   }
 }
 
-onMounted(() => {
-  runPipeline()
-})
+onMounted(runPipeline)
+watch(
+  () => [props.lang, props.lineNumbers],
+  () => runPipeline(),
+)
 </script>
 
 <template>

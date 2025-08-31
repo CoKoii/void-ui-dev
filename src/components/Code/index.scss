@@ -20,13 +20,10 @@
     white-space: pre;
     font-family: inherit;
     font-size: 14px;
-    line-height: 1.6;
   }
 
   :deep(code > span) {
     display: block;
-    min-height: 1.6em;
-    line-height: 1.6;
   }
 
   :deep(.hljs-keyword),
@@ -34,10 +31,13 @@
   :deep(.hljs-built_in),
   :deep(.hljs-name),
   :deep(.hljs-tag) {
-    color: #ff6b6b !important;
+    color: #85e89d !important;
     font-weight: 600 !important;
   }
-
+  :deep(.hljs-attr) {
+    color: #b392f0 !important;
+    font-weight: 600 !important;
+  }
   :deep(.hljs-string),
   :deep(.hljs-title),
   :deep(.hljs-section),
