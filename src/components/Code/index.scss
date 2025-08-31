@@ -184,8 +184,8 @@
 
 .VCode.with-lines {
   counter-reset: v-code-line;
-  --v-code-gutter-width: 1.5em;
-  --v-code-gutter-gap: 1em;
+  --v-code-gutter-width: 1.8em;
+  --v-code-gutter-gap: 1.8em;
 
   :deep(code) {
     line-height: 1.6;
@@ -202,11 +202,12 @@
     width: var(--v-code-gutter-width);
     margin-right: var(--v-code-gutter-gap);
     text-align: right;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.3);
     user-select: none;
+    font-size: 12px;
   }
 }
 
 .beauty {
-  padding: 48px 24px 24px 24px;
+  padding: 48px 24px 24px 12px;
 }
