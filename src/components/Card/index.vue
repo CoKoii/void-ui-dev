@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CardProps } from 'ant-design-vue'
+import { CardProps } from './types'
 
 const props = withDefaults(defineProps<CardProps>(), {
   bordered: true,
