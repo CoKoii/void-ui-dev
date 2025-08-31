@@ -22,6 +22,11 @@ const languageMap: Readonly<Record<string, string>> = Object.freeze({
   html: 'xml',
   htm: 'xml',
   template: 'xml',
+  css: 'css',
+  scss: 'scss',
+  sass: 'scss',
+  less: 'less',
+  stylus: 'stylus',
 })
 
 function resolveLanguage(lang: string | undefined): string | undefined {

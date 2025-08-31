@@ -27,11 +27,6 @@
     font-size: 14px;
   }
 
-  :deep(code > span) {
-    display: block;
-  }
-
-  :deep(.hljs-keyword),
   :deep(.hljs-selector-tag),
   :deep(.hljs-built_in),
   :deep(.hljs-name),
@@ -39,11 +34,14 @@
     color: #85e89d !important;
     font-weight: 600 !important;
   }
+  :deep(.hljs-keyword) {
+    color: #f97583 !important;
+    font-weight: 600 !important;
+  }
   :deep(.hljs-attr) {
     color: #b392f0 !important;
     font-weight: 600 !important;
   }
-  :deep(.hljs-string),
   :deep(.hljs-title),
   :deep(.hljs-section),
   :deep(.hljs-attribute),
@@ -53,6 +51,9 @@
   :deep(.hljs-type),
   :deep(.hljs-addition) {
     color: #9ecbff !important;
+  }
+  :deep(.hljs-string) {
+    color: #79b8ff !important;
   }
 
   :deep(.hljs-comment),
@@ -66,9 +67,11 @@
 
   :deep(.hljs-function),
   :deep(.hljs-class),
-  :deep(.hljs-title.class_),
   :deep(.hljs-title.function_) {
     color: #b392f0 !important;
+  }
+  :deep(.hljs-title.class_) {
+    color: rgba(255, 255, 255) !important;
   }
 
   :deep(.hljs-variable),
@@ -158,18 +161,23 @@
 
 .VCode.with-lines {
   counter-reset: v-code-line;
+  --v-code-gutter-width: 1.5em;
+  --v-code-gutter-gap: 1em;
+
+  :deep(code) {
+    line-height: 1.6;
+  }
 
   :deep(code > span) {
-    position: relative;
-    padding-left: 3.5em;
+    display: block;
   }
 
   :deep(code > span)::before {
     counter-increment: v-code-line;
     content: counter(v-code-line);
-    position: absolute;
-    left: 0;
-    width: 1em;
+    display: inline-block;
+    width: var(--v-code-gutter-width);
+    margin-right: var(--v-code-gutter-gap);
     text-align: right;
     color: rgba(255, 255, 255, 0.55);
     user-select: none;
