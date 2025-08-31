@@ -1,9 +1,19 @@
 .VIcon {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: inherit;
   line-height: 1;
   vertical-align: middle;
-  aspect-ratio: 1;
+
+  .VIcon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+
+    svg {
+      display: block;
+    }
+  }
 }

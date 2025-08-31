@@ -10,7 +10,9 @@ defineOptions({
 
 <template>
   <i class="VIcon" :style="{ '--v-icon-color': props.color }">
-    <FontAwesomeIcon v-bind="props" />
+    <span class="VIcon-wrapper">
+      <FontAwesomeIcon v-bind="props" />
+    </span>
   </i>
 </template>
 
