@@ -3,7 +3,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { formatByLang } from './rules'
 import type { CodeProps } from './types'
 import VIcon from '../Icon/index.vue'
-import { faCopy } from '@fortawesome/free-solid-svg-icons'
+import { faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
 import 'highlight.js/styles/github-dark.css'
 
 defineOptions({ name: 'VCode', inheritAttrs: true })
@@ -31,6 +31,7 @@ const extraConfig = computed(() => {
 const slotEl = ref<HTMLElement | null>(null)
 const html = ref('')
 const codeEl = ref<HTMLElement | null>(null)
+const copyState = ref<'idle' | 'copying' | 'success'>('idle')
 
 const getRawCode = () => slotEl.value?.textContent ?? ''
 
@@ -101,12 +102,22 @@ function runPipeline() {
 }
 
 async function copyCode() {
+  if (copyState.value === 'copying') return
+
+  copyState.value = 'copying'
+
   try {
     const raw = getRawCode()
     await navigator.clipboard.writeText(raw)
+    copyState.value = 'success'
     emit('copy', true)
+
+    setTimeout(() => {
+      copyState.value = 'idle'
+    }, 2000)
   } catch {
     emit('copy', false)
+    copyState.value = 'idle'
   }
 }
 
@@ -138,8 +149,15 @@ watch(
     </div>
     <div class="lang" v-if="extraConfig.showLang">{{ props.lang }}</div>
     <div class="tools" v-if="extraConfig.copy">
-      <div class="copy" @click="copyCode">
-        <VIcon :icon="faCopy" />
+      <div
+        class="copy"
+        :class="{
+          copying: copyState === 'copying',
+          success: copyState === 'success',
+        }"
+        @click="copyCode"
+      >
+        <VIcon :icon="copyState === 'success' ? faCheck : faCopy" />
       </div>
     </div>
   </div>
