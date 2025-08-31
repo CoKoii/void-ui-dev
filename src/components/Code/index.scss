@@ -5,7 +5,12 @@
   color: rgba(255, 255, 255);
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   position: relative;
-
+  &:hover .tools {
+    opacity: 1;
+  }
+  &:hover .lang {
+    opacity: 0;
+  }
   .code-wrapper {
     overflow: auto;
     scrollbar-width: none;
@@ -83,12 +88,14 @@
     right: 12px;
     font-size: 12px;
     user-select: none;
+    opacity: 1;
+    transition: all 0.3s;
   }
 
   .tools {
     position: absolute;
-    top: 24px;
-    right: 24px;
+    top: 8px;
+    right: 12px;
     display: flex;
     gap: 12px;
     align-items: center;
@@ -96,14 +103,11 @@
     flex-direction: row-reverse;
     opacity: 0;
     transition: all 0.3s;
-    &:hover {
-      opacity: 1;
-    }
     .copy {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 16px;
       color: rgba(255, 255, 255, 0.55);
       cursor: pointer;
       border-radius: 8px;
