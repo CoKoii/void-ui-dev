@@ -1,6 +1,6 @@
 {
   "name": "void-design-vue",
-  "version": "1.0.28",
+  "version": "1.0.30",
   "description": "A Vue 3 UI Component Library",
   "type": "module",
   "main": "./dist/void-design-vue.umd.cjs",
@@ -36,6 +36,7 @@
     "type": "git",
     "url": "git+https://github.com/CoKoii/void-ui-dev.git"
   },
+  "homepage": "https://cokoii.github.io/VoidUI/",
   "engines": {
     "node": ">=18"
   },
