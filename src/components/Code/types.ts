@@ -4,7 +4,6 @@ export interface CodeProps {
   extra?:
     | {
         copy?: boolean
-        download?: boolean
         showLang?: boolean
       }
     | boolean

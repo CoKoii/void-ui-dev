@@ -3,8 +3,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { formatByLang } from './rules'
 import type { CodeProps } from './types'
 import VIcon from '../Icon/index.vue'
-import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons'
-import html2canvas from 'html2canvas'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import 'highlight.js/styles/github-dark.css'
 
 defineOptions({ name: 'VCode', inheritAttrs: true })
@@ -17,18 +16,14 @@ const props = withDefaults(defineProps<CodeProps>(), {
 
 const emit = defineEmits<{
   (e: 'copy', success: boolean): void
-  (e: 'download', success: boolean): void
 }>()
 
 const extraConfig = computed(() => {
   if (typeof props.extra === 'boolean') {
-    return props.extra
-      ? { copy: true, download: true, showLang: true }
-      : { copy: false, download: false, showLang: false }
+    return props.extra ? { copy: true, showLang: true } : { copy: false, showLang: false }
   }
   return {
     copy: props.extra?.copy ?? true,
-    download: props.extra?.download ?? true,
     showLang: props.extra?.showLang ?? true,
   }
 })
@@ -115,23 +110,6 @@ async function copyCode() {
   }
 }
 
-async function downloadImage() {
-  if (!codeEl.value) return
-  try {
-    const canvas = await html2canvas(codeEl.value, {
-      backgroundColor: 'transparent',
-      scale: 3,
-    })
-    const link = document.createElement('a')
-    link.download = `${props.lang}-code.png`
-    link.href = canvas.toDataURL('image/png')
-    link.click()
-    emit('download', true)
-  } catch {
-    emit('download', false)
-  }
-}
-
 onMounted(runPipeline)
 watch(
   () => [props.lang, props.lineNumbers],
@@ -159,12 +137,9 @@ watch(
       <code v-html="html"></code>
     </div>
     <div class="lang" v-if="extraConfig.showLang">{{ props.lang }}</div>
-    <div class="tools" v-if="extraConfig.copy || extraConfig.download">
-      <div class="copy" @click="copyCode" v-if="extraConfig.copy">
+    <div class="tools" v-if="extraConfig.copy">
+      <div class="copy" @click="copyCode">
         <VIcon :icon="faCopy" />
-      </div>
-      <div class="download" @click="downloadImage" v-if="extraConfig.download">
-        <VIcon :icon="faDownload" />
       </div>
     </div>
   </div>
