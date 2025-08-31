@@ -47,7 +47,7 @@ const vueTemplateCode = `<template>
     <VThemeToggle class="changeTheme" />
     <VCode
       :line-numbers="true"
-      :extra="{ copy: true, download: true, showLang: true }"
+      :extra="{ copy: true, showLang: true }"
       lang="template"
       style="width: 600px"
       path="UserCard.vue"
