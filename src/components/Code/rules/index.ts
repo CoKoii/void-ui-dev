@@ -25,42 +25,27 @@ const languageMap: Record<string, string> = {
 }
 
 export function formatByLang(lang: string, code: string): string {
-  const trimmedCode = code.trim()
-  if (!trimmedCode) return wrapLines('&nbsp;')
+  // 统一换行符，避免 CRLF 干扰
+  const normalized = code.replace(/\r\n?/g, '\n')
+  const trimmed = normalized.trim()
+  if (!trimmed) return '&nbsp;'
 
   // 获取实际的语言名称
   const actualLang = languageMap[lang?.toLowerCase()] || lang?.toLowerCase()
 
   try {
-    let highlighted: string
-
     if (actualLang && hljs.getLanguage(actualLang)) {
-      // 使用指定语言进行高亮
-      highlighted = hljs.highlight(trimmedCode, { language: actualLang }).value
-    } else {
-      // 自动检测语言
-      const result = hljs.highlightAuto(trimmedCode)
-      highlighted = result.value
+      // 整段高亮，保持跨行语法高亮的上下文
+      return hljs.highlight(trimmed, { language: actualLang }).value
     }
-
-    return wrapLines(highlighted)
+    return hljs.highlightAuto(trimmed).value
   } catch (error) {
-    // 如果高亮失败，返回转义后的原始代码
     console.warn('Code highlighting failed:', error)
-    return wrapLines(escapeHtml(trimmedCode))
+    return escapeHtml(trimmed)
   }
 }
 
 export function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
-
-export function wrapLines(content: string): string {
-  return content
-    .split('\n')
-    .map(
-      (line) =>
-        `<span style="display: block; min-height: 1.6em; line-height: 1.6;font-size:12px">${line || '&nbsp;'}</span>`,
-    )
-    .join('')
-}
+// 行包裹在组件层（index.vue）完成，以避免破坏高亮结构

@@ -32,9 +32,74 @@ const slotEl = ref<HTMLElement | null>(null)
 const html = ref('')
 const codeEl = ref<HTMLElement | null>(null)
 
+function wrapHighlightedHtmlToLines(highlighted: string): string {
+  const container = document.createElement('div')
+  container.innerHTML = highlighted
+
+  const lines: HTMLElement[] = []
+  let currentLine = document.createElement('span')
+  lines.push(currentLine)
+
+  const origStack: Element[] = []
+  let cloneStack: Element[] = []
+
+  const getTarget = () => (cloneStack.length ? cloneStack[cloneStack.length - 1] : currentLine)
+
+  function startNewLine() {
+    currentLine = document.createElement('span')
+    lines.push(currentLine)
+    // 依据当前原始路径重建克隆路径
+    cloneStack = []
+    let parent: Element | HTMLElement = currentLine
+    for (const orig of origStack) {
+      const clone = orig.cloneNode(false) as Element
+      parent.appendChild(clone)
+      parent = clone
+      cloneStack.push(clone)
+    }
+  }
+
+  function walk(node: Node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.nodeValue || ''
+      const parts = text.split('\n')
+      for (let i = 0; i < parts.length; i++) {
+        if (parts[i]) getTarget().appendChild(document.createTextNode(parts[i]))
+        if (i < parts.length - 1) {
+          // 遇到换行，开启新行并保持当前打开的标签链
+          startNewLine()
+        }
+      }
+      return
+    }
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as Element
+      const clone = el.cloneNode(false) as Element
+      getTarget().appendChild(clone)
+      origStack.push(el)
+      cloneStack.push(clone)
+      // 递归其子节点
+      const children = Array.from(el.childNodes)
+      for (const child of children) walk(child)
+      // 退出该元素
+      origStack.pop()
+      cloneStack.pop()
+      return
+    }
+  }
+
+  for (const child of Array.from(container.childNodes)) {
+    walk(child)
+  }
+
+  return lines.map((el) => el.outerHTML).join('')
+}
+
 function runPipeline() {
   const raw = slotEl.value?.textContent ?? ''
-  html.value = formatByLang(props.lang, raw)
+  const highlighted = formatByLang(props.lang, raw)
+  html.value = props.lineNumbers ? wrapHighlightedHtmlToLines(highlighted) : highlighted
 }
 
 async function copyCode() {

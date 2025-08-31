@@ -16,11 +16,16 @@
   }
 
   code {
-    display: flex;
-    flex-direction: column;
+    display: block;
     white-space: pre;
     font-family: inherit;
     font-size: 14px;
+    line-height: 1.6;
+  }
+
+  :deep(code > span) {
+    display: block;
+    min-height: 1.6em;
     line-height: 1.6;
   }
 
