@@ -87,8 +87,8 @@
 
   .tools {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 24px;
+    right: 24px;
     display: flex;
     gap: 12px;
     align-items: center;
@@ -108,7 +108,7 @@
       color: rgba(255, 255, 255, 0.55);
       cursor: pointer;
       border-radius: 8px;
-      padding: 6px;
+      padding: 8px;
       &:hover {
         background-color: rgba(255, 255, 255, 0.096);
       }
