@@ -19,7 +19,6 @@ const props = withDefaults(defineProps<ThemeToggleProps>(), {
   duration: 450,
   easing: 'ease-in-out',
   storageKey: 'theme',
-  ariaLabel: '切换主题',
   emitInitial: true,
   respectReducedMotion: true,
 })
@@ -244,7 +243,6 @@ defineExpose({
     type="button"
     role="switch"
     :aria-checked="isDarkTheme"
-    :aria-label="props.ariaLabel"
     @click="toggleTheme($event)"
   >
     <slot>

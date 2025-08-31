@@ -23,8 +23,6 @@ export interface ThemeToggleProps {
   maxRadius?: number
   // 本地存储键
   storageKey?: string
-  // 无障碍标签
-  ariaLabel?: string
   // 是否在初始化时触发 theme-change
   emitInitial?: boolean
   // 遵从系统的减少动画偏好
