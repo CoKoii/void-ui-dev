@@ -225,8 +225,8 @@
 
 .VCode.with-lines {
   counter-reset: v-code-line;
-  --v-code-gutter-width: 1.8em;
-  --v-code-gutter-gap: 1.8em;
+  --v-code-gutter-width: 1.5em;
+  --v-code-gutter-gap: 1.5em;
 
   :deep(code) {
     line-height: 1.6;
@@ -250,5 +250,5 @@
 }
 
 .beauty {
-  padding: 48px 24px 24px 24px;
+  padding: 48px 12px 24px 12px;
 }
