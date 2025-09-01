@@ -35,13 +35,11 @@ const toggleExpanded = () => {
         <VIcon :icon="faCode" />
       </div>
     </div>
-    <Transition name="fade" mode="out-in">
-      <div class="code" v-if="isExpanded">
-        <VCode v-bind="props">
-          <slot name="code" />
-        </VCode>
-      </div>
-    </Transition>
+    <div class="code" v-if="isExpanded">
+      <VCode v-bind="props">
+        <slot name="code" />
+      </VCode>
+    </div>
   </div>
 </template>
 
