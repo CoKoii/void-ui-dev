@@ -26,7 +26,7 @@ import { faCode } from '@fortawesome/free-solid-svg-icons'
 
 <template>
   <div class="App">
-    <VThemeToggle class="changeTheme" />
+    <VThemeToggle class="changeTheme" :persistent="true" />
     <VCodePreview lang="vue" :dots="true">
       <template #demo>
         <VCard title="示例卡片" description="这是一个卡片组件的演示">

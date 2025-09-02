@@ -86,25 +86,22 @@ const syncColorScheme = (theme: string) => {
 }
 
 const setTheme = (next: string) => {
+  if (next === currentTheme.value) return
   currentTheme.value = next
   if (root) root.setAttribute(props.themeKey, next)
   syncColorScheme(next)
-
-  if (!props.followSystem) {
-    setStoredTheme(next)
-  }
-
+  if (props.persistent) setStoredTheme(next)
   emit('theme-change', next)
 }
 
 const getInitialTheme = (): string => {
   const domTheme = root?.getAttribute(props.themeKey)
   if (domTheme) return domTheme
+  const stored = getStoredTheme()
+  if (stored) return stored
   if (props.followSystem) {
     return isSystemDark.value ? props.darkTheme : props.lightTheme
   }
-  const stored = getStoredTheme()
-  if (stored) return stored
   return props.lightTheme
 }
 
@@ -128,7 +125,10 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
   if (animating) return
   const next = getNextTheme()
 
-  if (shouldReduceMotion() || !('startViewTransition' in document)) return setTheme(next)
+  const doc = document as Document & {
+    startViewTransition?: (callback: () => void) => ViewTransition
+  }
+  if (shouldReduceMotion() || !doc.startViewTransition) return setTheme(next)
 
   animating = true
   const { x, y } = getPoint(e)
@@ -140,23 +140,36 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
     return
   }
 
+  if (root) {
+    if (next === props.darkTheme) {
+      root.style.setProperty('--vt-old-z', '0')
+      root.style.setProperty('--vt-new-z', '1')
+    } else {
+      root.style.setProperty('--vt-old-z', '1')
+      root.style.setProperty('--vt-new-z', '0')
+    }
+  }
+
   try {
-    const vt = (
-      document as Document & { startViewTransition: (callback: () => void) => ViewTransition }
-    ).startViewTransition(() => setTheme(next))
+    const vt = doc.startViewTransition(() => setTheme(next))
     await vt.ready
 
+    const isNextDark = next === props.darkTheme
+    const keyframes = isNextDark
+      ? { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] }
+      : { clipPath: [`circle(${r}px at ${x}px ${y}px)`, `circle(0px at ${x}px ${y}px)`] }
+    const pseudoElement = isNextDark ? '::view-transition-new(root)' : '::view-transition-old(root)'
+
     await root
-      ?.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
-        {
-          duration: props.duration,
-          easing: props.easing,
-          pseudoElement: '::view-transition-new(root)',
-        },
-      )
+      ?.animate(keyframes, {
+        duration: props.duration,
+        easing: props.easing,
+        pseudoElement,
+      })
       .finished.catch(() => {})
   } finally {
+    root?.style.removeProperty('--vt-old-z')
+    root?.style.removeProperty('--vt-new-z')
     animating = false
   }
 }
@@ -164,6 +177,7 @@ const toggleTheme = async (e?: MouseEvent | PointerEvent) => {
 const handleSystemThemeChange = (e: MediaQueryListEvent) => {
   isSystemDark.value = e.matches
   if (props.followSystem) {
+    if (props.persistent && getStoredTheme()) return
     const newTheme = e.matches ? props.darkTheme : props.lightTheme
     setTheme(newTheme)
   }
@@ -247,11 +261,7 @@ defineExpose({
   >
     <slot>
       <div class="theme-toggle-icon" :data-theme="isDarkTheme ? 'dark' : 'light'">
-        <VIcon
-          :key="isDarkTheme ? 'sun' : 'moon'"
-          :icon="isDarkTheme ? faSun : faMoon"
-          :color="'var(--v-gray-9)'"
-        />
+        <VIcon :icon="isDarkTheme ? faSun : faMoon" :color="'var(--v-gray-9)'" />
       </div>
     </slot>
   </button>
@@ -266,5 +276,11 @@ defineExpose({
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: var(--vt-old-z, 0);
+}
+::view-transition-new(root) {
+  z-index: var(--vt-new-z, 1);
 }
 </style>
