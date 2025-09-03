@@ -33,7 +33,7 @@ import { faCode } from '@fortawesome/free-solid-svg-icons'
           <template #icon>
             <VIcon :icon="faCode" />
           </template>
-          <p>卡片内容区域</p>
+          <p>卡片内容区域111</p>
         </VCard>
       </template>
       <template #code>{{ codeExample }}</template>
